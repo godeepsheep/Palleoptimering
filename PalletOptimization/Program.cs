@@ -1,9 +1,15 @@
+using PalletOptimization.Utilities;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
+
+// Test database connection
+DatabaseTest dbTest = new DatabaseTest();
+dbTest.TestConnection();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
