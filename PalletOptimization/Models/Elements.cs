@@ -3,7 +3,7 @@ namespace PalletOptimization.Models
 {
     public class Elements
     {
-        public int RotationRules { get; set; }
+        public RotationOptions RotationOptions { get; set; }
         public bool SpecialPallet { get; set; }
         public PalletType PalletType { get; set; }
         public int? MaxElementsPerPallet { get; set; } = null;

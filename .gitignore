@@ -10,3 +10,7 @@ PalletOptimization/obj/Debug/net8.0/PalletOptimization.csproj.BuildWithSkipAnaly
 PalletOptimization/obj/Debug/net8.0/PalletOptimization.GeneratedMSBuildEditorConfig.editorconfig
 PalletOptimization/obj/Debug/net8.0/PalletOptimization.AssemblyInfoInputs.cache
 PalletOptimization/obj/Debug/net8.0/PalletOptimization.AssemblyInfo.cs
+*.editorconfig
+*.cache
+PalletOptimization/obj/Debug/net8.0/PalletOptimization.AssemblyInfo.cs
+PalletOptimization/.vs/PalletOptimization/v17/.suo
