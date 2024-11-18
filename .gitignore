@@ -1,3 +1,7 @@
 
 *.vsidx
 *.user
+PalletOptimization/obj/Debug/net8.0/PalletOptimization.GeneratedMSBuildEditorConfig.editorconfig
+PalletOptimization/obj/Debug/net8.0/PalletOptimization.csproj.AssemblyReference.cache
+PalletOptimization/obj/Debug/net8.0/PalletOptimization.AssemblyInfoInputs.cache
+PalletOptimization/obj/Debug/net8.0/PalletOptimization.AssemblyInfo.cs
