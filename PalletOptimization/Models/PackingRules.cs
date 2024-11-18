@@ -1,4 +1,6 @@
-﻿namespace PalletOptimization.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace PalletOptimization.Models
 {
     public class PackingRules
     {
