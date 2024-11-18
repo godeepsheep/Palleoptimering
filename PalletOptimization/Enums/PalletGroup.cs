@@ -4,7 +4,7 @@
     {
         Industrial = 0,
         EURO70,
-        ERUO80, 
+        EURO80, 
         Half, 
         Quarter,        
     }
