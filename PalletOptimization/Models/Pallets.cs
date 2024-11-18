@@ -15,7 +15,7 @@ namespace PalletOptimization.Models
         public int MaxOverhang { get; set; } = 0;
         public int SlotsOnPallet { get; set; } = 5;
         public int SpaceBetweenElements { get; set; }
-        public bool SpecialPalelt { get; set; }
+        public bool SpecialPallet { get; set; }
         public string? PalletGroup { get; set; }
         public required string PalletType { get; set; }
         public bool Active { get; set; } = false;
