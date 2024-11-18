@@ -9,5 +9,6 @@ namespace PalletOptimization.Models
         public int PalletLength { get; set; }
         public int PalletWidth { get; set; }
         public int PalletHeight { get; set; }
+        public int PalletWeight { get; set; }
     }
 }

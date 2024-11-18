@@ -4,6 +4,9 @@ namespace PalletOptimization.Models
 {
     public class Pallets
     {
+        //terrible naming from the assignment means that this is the PACKED pallet, and not the empty one.
+        //Length, width and height would then be the values of the empty pallet, plus any overhang.
+        //And the height would be the total height of everything on it.
         public int id { get; set; }
         public string? PalletDescription { get; set; }
         public int Length { get; set; }

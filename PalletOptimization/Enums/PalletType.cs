@@ -4,7 +4,6 @@
     {
         Wood= 0,
         Plastic,
-        Glass,
         Aluminum,        
     }
 }
