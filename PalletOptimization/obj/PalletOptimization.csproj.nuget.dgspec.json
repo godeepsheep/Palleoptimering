@@ -1,20 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Mark\\Documents\\GitHub\\Palleoptimering\\PalletOptimization\\PalletOptimization.csproj": {}
+    "C:\\Users\\GoDee\\Desktop\\ExamensProject\\Palleoptimering\\PalletOptimization\\PalletOptimization.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Mark\\Documents\\GitHub\\Palleoptimering\\PalletOptimization\\PalletOptimization.csproj": {
+    "C:\\Users\\GoDee\\Desktop\\ExamensProject\\Palleoptimering\\PalletOptimization\\PalletOptimization.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Mark\\Documents\\GitHub\\Palleoptimering\\PalletOptimization\\PalletOptimization.csproj",
+        "projectUniqueName": "C:\\Users\\GoDee\\Desktop\\ExamensProject\\Palleoptimering\\PalletOptimization\\PalletOptimization.csproj",
         "projectName": "PalletOptimization",
-        "projectPath": "C:\\Users\\Mark\\Documents\\GitHub\\Palleoptimering\\PalletOptimization\\PalletOptimization.csproj",
-        "packagesPath": "C:\\Users\\Mark\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Mark\\Documents\\GitHub\\Palleoptimering\\PalletOptimization\\obj\\",
+        "projectPath": "C:\\Users\\GoDee\\Desktop\\ExamensProject\\Palleoptimering\\PalletOptimization\\PalletOptimization.csproj",
+        "packagesPath": "C:\\Users\\GoDee\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\GoDee\\Desktop\\ExamensProject\\Palleoptimering\\PalletOptimization\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\Mark\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\GoDee\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -22,6 +26,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
