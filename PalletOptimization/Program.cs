@@ -8,8 +8,8 @@ builder.Services.AddControllersWithViews();
 var app = builder.Build();
 
 // Test database connection
-DatabaseTest dbTest = new DatabaseTest();
-dbTest.TestConnection();
+DatabaseAccess dbTest = DatabaseAccess.GetInstance();
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
