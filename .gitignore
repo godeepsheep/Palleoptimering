@@ -14,3 +14,8 @@ PalletOptimization/obj/Debug/net8.0/PalletOptimization.AssemblyInfo.cs
 *.cache
 PalletOptimization/obj/Debug/net8.0/PalletOptimization.AssemblyInfo.cs
 PalletOptimization/.vs/PalletOptimization/v17/.suo
+*.editorconfig
+PalletOptimization/obj/project.assets.json
+PalletOptimization/obj/project.nuget.cache
+PalletOptimization/obj/PalletOptimization.csproj.nuget.g.props
+PalletOptimization/obj/PalletOptimization.csproj.nuget.dgspec.json

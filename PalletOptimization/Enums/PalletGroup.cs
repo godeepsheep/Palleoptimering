@@ -2,7 +2,7 @@
 {
     public enum PalletGroup
     {
-        Industrial = 0,
+        Industrial = 1,
         EURO70,
         EURO80, 
         Half, 
