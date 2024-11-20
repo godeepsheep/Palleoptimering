@@ -25,7 +25,7 @@ public class PalletsController
         // TODO: Exchange this with a view
         foreach (var pallet in palletGroups)
         {
-            Console.WriteLine("gay");
+            Console.WriteLine($"ID: {pallet.Id}, Length: {pallet.Length}, Width: {pallet.Width}");
         }
     }
 
@@ -48,9 +48,9 @@ public class PalletsController
     }
     
 
-    public void Delete(string Name)
-    {
-        using AppDbContext x = AppDbContext;
-        var palletGroup = db.PalletGroups.Remove(p => p.ID = Enum.TryParse<PalletGroup>(Name));
-    }
+//    public void Delete(string Name)
+//    {
+//        using AppDbContext x = AppDbContext;
+//        var palletGroup = db.PalletGroups.Remove(p => p.ID = Enum.TryParse<PalletGroup>(Name));
+//    }
 }

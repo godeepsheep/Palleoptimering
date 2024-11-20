@@ -1,11 +1,11 @@
 using DotNetEnv;
 using PalletOptimization.Data;
-using PalletOptimization.Utilities;
 using Microsoft.EntityFrameworkCore;
 using PalletOptimization.Controllers;
 
-
+// Load environment variables from the .env file
 Env.Load();
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -22,30 +22,44 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 //Scoped means that one instance is created per HTTP request.
 builder.Services.AddScoped<PalletsController>();
 
+//Builds the application
 var app = builder.Build();
 
-// Test CRUD stuff here if needed
-//CreateScope starts a new DI for this block of code.
-//GetRequiredService<PalletsController>() tells the DI to give an instance of PalletsController.
-//The DI container makes an AppDbContext and injects it in to PalletsController constructor.
+// Create a DI scope for testing CRUD operations
+// This scope is independent of the HTTP pipeline
 using (var scope = app.Services.CreateScope())
 {
+    // Get AppDbContext instance from the DI container
     var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    context.PalletGroups.Add(new PalletOptimization.Models.PalletGroup
+
+    try
     {
-        Length = 1200,
-        Width = 800,
-        Height = 150,
-        BaseWeight = 20,
-        BaseMaxWeight = 5000,
-    });
-    context.SaveChanges();
-    
-    //test 1
-    
-    //Test 2
-    
-    
+        // Test: Add a new PalletGroup to the database
+        Console.WriteLine("Testing database insertion...");
+        var newPalletGroup = new PalletOptimization.Models.PalletGroup
+        {
+            Length = 1200,
+            Width = 800,
+            Height = 150,
+            BaseWeight = 20,
+            MaxWeight = 5000
+        };
+        context.PalletGroups.Add(newPalletGroup); // Add PalletGroup to the database context
+        context.SaveChanges(); // Save changes to the database
+        Console.WriteLine($"PalletGroup added with ID: {newPalletGroup.Id}");
+
+        // Test: Retrieve and display all PalletGroups from the database
+        var allPalletGroups = context.PalletGroups.ToList();
+        Console.WriteLine("PalletGroups in the database:");
+        foreach (var pallet in allPalletGroups)
+        {
+            Console.WriteLine($"ID: {pallet.Id}, Length: {pallet.Length}, Width: {pallet.Width}, Height: {pallet.Height}, BaseWeight: {pallet.BaseWeight}, BaseMaxWeight: {pallet.MaxWeight}");
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"An error occurred while testing the database: {ex.Message}");
+    }
 }
 
 // Configure the HTTP request pipeline.
@@ -57,9 +71,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
-
 app.UseAuthorization();
 
 app.MapControllerRoute(
