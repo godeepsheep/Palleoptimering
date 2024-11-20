@@ -9,16 +9,7 @@ namespace PalletOptimization.Data
 {
     public class AppDbContext : DbContext
     {
-      
-        
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-                //I made this an enviormental variable for security. It's the .env file 
-                optionsBuilder.UseSqlServer(Environment.GetEnvironmentVariable("Server_Password"));
-            }
-        }
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
         
         //Taking the objects from Model class
         //DbSet is sending a query to database, DBset includes all the values from the database. 
