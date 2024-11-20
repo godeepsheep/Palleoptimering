@@ -1,32 +1,26 @@
-﻿using PalletOptimization.Enums;
+﻿using PalletOptimization.Data;
+using PalletOptimization.Enums;
 using PalletOptimization.Models;
 using PalletOptimization.Utilities;
+using PalletGroup = PalletOptimization.Models.PalletGroup;
 
 namespace PalletOptimization.Controllers;
 
 public class PalletsController
 {
 
-    private DatabaseAccess DB;
-
-    public PalletsController()
+    public void Read()
     {
-        DB = DatabaseAccess.GetInstance();
-    }
-    
-    public void CreatePallet(int palletLength, int palletWidth,
-                                int palletHeight, int palletWeight, int MaxWeight)
-    {
-        string SQLQuery = $"INSERT INTO PalletGroups VALUES (,{palletLength}," +
-            $"{palletWidth},{palletHeight},{palletWeight}, {MaxWeight})";
-        DB.ExecuteQuery( SQLQuery );
-    }
+        //List all PalletGroups
+        using var context = new AppDbContext();
+        var PalletGroup = context.PalletGroups.ToList();
+        //TODO: Exchange this with view
+        foreach (var pallet in PalletGroup)
+        {
+            Console.WriteLine(pallet.Height);
+        }
+        
+        
 
-    public List<PalletGroupModel> GetPallets()
-    {
-        string SQLQuery = "SELECT * FROM PalletGroups";
-        DB.ExecuteQuery( SQLQuery );
     }
-
-
 }

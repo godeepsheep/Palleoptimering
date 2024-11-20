@@ -3,7 +3,7 @@
 
 namespace PalletOptimization.Models
 {
-    public class PalletGroupModel
+    public class PalletGroup
     {
         public int Length { get; set; }
         public int Width { get; set; }

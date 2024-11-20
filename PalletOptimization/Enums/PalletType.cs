@@ -2,8 +2,8 @@
 {
     public enum PalletType
     {
-        Wood= 0,
-        Plastic,
-        Aluminum,        
+        Wood = 0,
+        Metal = 1,
+        Plastic = 2
     }
 }

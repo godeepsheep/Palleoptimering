@@ -6,7 +6,8 @@ namespace PalletOptimization.Utilities
 {
     public sealed class DatabaseAccess
     {
-        private static readonly string connectionString = "Server=mssql12.unoeuro.com,1433;Database=straysheep_dk_db_palleoptimering;User Id=straysheep_dk;Password=kpwr269GHdxcBbtmRDze;";
+        //I made this an enviormental variable for security. It's the .env file 
+        private static readonly string connectionString = Environment.GetEnvironmentVariable("Server_Password");
         private static DatabaseAccess? instance;
         SqlConnection connection;
         public DatabaseAccess()
