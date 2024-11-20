@@ -7,5 +7,6 @@
         Euro80 = 2, 
         Half = 3, 
         Quarter = 4,        
-    }
+
+} 
 }

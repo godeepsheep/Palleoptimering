@@ -46,4 +46,12 @@ public class PalletsController
             Console.WriteLine($"PalletGroup with ID {id} not found.");
         }
     }
+
+
+
+    public void Delete(string Name)
+    {
+        using AppDbContext x = AppDbContext;
+        var palletGroup = db.PalletGroups.Remove(p => p.ID = Enum.TryParse<PalletGroup>(Name));
+    }
 }
