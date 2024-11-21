@@ -10,7 +10,7 @@ namespace PalletOptimization.Data
         //Constructor to initialize DbContext with options
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
-        // Tables for the database
+        // Tables for the database you are storing the whole Elements table in DBset
         public DbSet<Elements> Elements { get; set; }
         public DbSet<PalletType> PalletTypes { get; set; }
         public DbSet<PalletGroup> PalletGroups { get; set; }
@@ -22,6 +22,7 @@ namespace PalletOptimization.Data
             //ModelBuilder is responsible for all the mapping. Basically it configures how Elements class maps to the database.
             modelBuilder.Entity<Elements>(entity =>
             {
+                //We are checking if the Elements table has a key. 
                 entity.HasKey(e => e.Id); //EntityFramework tells SQL Server to create a PK constraint on the Id column in the db.
                 //The => means take the object (e) of type (Elements) access its Id and use it as a primary key.
                 entity.Property(e => e.Length).IsRequired(); 
@@ -29,6 +30,7 @@ namespace PalletOptimization.Data
                 entity.Property(e => e.Height).IsRequired();
                 entity.Property(e => e.Weight).IsRequired();
             });
+            
 
             // Configure PalletType
             modelBuilder.Entity<PalletType>(entity =>
@@ -47,7 +49,7 @@ namespace PalletOptimization.Data
                 entity.Property(pg => pg.Width).IsRequired(); 
                 entity.Property(pg => pg.Height).IsRequired(); 
                 entity.Property(pg => pg.BaseWeight).IsRequired(); 
-                entity.Property(pg => pg.MaxWeight).IsRequired(); 
+                entity.Property(pg => pg.MaxWeight).IsRequired();
             });
         }
     }
