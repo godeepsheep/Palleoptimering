@@ -1,6 +1,6 @@
 ﻿namespace PalletOptimization.Enums
 {
-    public enum PalletGroup
+    public enum PalletGroupEnum
     {
         Industrial = 0,
         EURO70,

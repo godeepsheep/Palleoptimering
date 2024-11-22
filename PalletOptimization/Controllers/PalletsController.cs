@@ -46,6 +46,42 @@ public class PalletsController
             Console.WriteLine($"PalletGroup with ID {id} not found.");
         }
     }
+
+    public void AddPalletGroup(int length, int width, int height, int baseWeight, int maxWeight)
+    {
+        PalletGroup palletGroup = new();
+        palletGroup.Length = length;
+        palletGroup.Width = width;
+        palletGroup.Height = height;    
+        palletGroup.BaseWeight = baseWeight;    
+        palletGroup.MaxWeight = maxWeight;
+
+        try
+        {
+            _context.PalletGroups.Add(palletGroup);
+            //TODO: change ConsoleWriteline to visual on the view
+            Console.WriteLine("Successfully added pallet to DB");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Failed" + ex.ToString());
+        }
+    }
+
+    public void UpdatePalletGroup(int id, int length, int width, int height, int baseWeight, int maxWeight)
+    {
+        var ChangedPallet = _context.PalletGroups.Find(id);
+
+        ChangedPallet.Length     = length;
+        ChangedPallet.Width      = width;
+        ChangedPallet.Height     = height;
+        ChangedPallet.BaseWeight = baseWeight;
+        ChangedPallet.MaxWeight  = maxWeight;
+
+        _context.PalletGroups.Update(ChangedPallet);
+        _context.SaveChanges();
+    }
+
     
 
 //    public void Delete(string Name)
