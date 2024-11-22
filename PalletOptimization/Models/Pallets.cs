@@ -15,14 +15,15 @@
         public int Width { get; set; } // Total width (mm)
         public int Height { get; set; } // Total height (mm, including contents)
         public int Weight { get; set; } // Total weight (kg)
+        
         public int MaxHeight { get; set; } // Max allowable height (mm)
         public int MaxWeight { get; set; } // Max allowable weight (kg)
         public int MaxOverhang { get; set; } = 0; // Allowable overhang (mm)
         public int SlotsOnPallet { get; set; } = 5; // Number of slots for elements
         public int SpaceBetweenElements { get; set; } // Spacing between elements (mm)
+        
+        // Group, Type, Special details
         public bool SpecialPallet { get; set; } = false; // Is it a special pallet?
-
-        // Group and Type details
         public string? PalletGroup { get; set; } 
         public string PalletType { get; set; } = string.Empty; 
 

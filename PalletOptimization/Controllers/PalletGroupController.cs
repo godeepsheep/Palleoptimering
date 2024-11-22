@@ -4,13 +4,13 @@ using PalletOptimization.Models;
 
 namespace PalletOptimization.Controllers;
 
-public class PalletsController
+public class PalletGroupController
 {
     private readonly AppDbContext _context;
     //We registered AppDbContext in Program.cs and told it the following: builder.Services.AddDbContext<AppDbContext>
     //The DI looks at the constructor, sees that it needs an AppDbContext, uses the registration in Program.cs to create an AppDbContext and injects it here.
     // Constructor injection for AppDbContext
-    public PalletsController(AppDbContext context)
+    public PalletGroupController(AppDbContext context)
     {
         //the _ is to indicate that its private. Apparently its better for readability. 
         //So we are storing a private AppDbContext instance in _context that is injected into the controller by the DI. 

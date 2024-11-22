@@ -20,7 +20,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 // Register PalletController (PalletController depends on AppDbContext, so DI will inject AppDbContext instance into the PalletController constructor when u use it.)
 //Scoped means that one instance is created per HTTP request.
-builder.Services.AddScoped<PalletsController>(); //Here we are adding a palletscontroller to our application. 
+builder.Services.AddScoped<PalletGroupController>(); //Here we are adding a palletscontroller to our application. 
 //AddScoped Whenever someone (like an HTTP request) needs this thing (like an instance), give them their very own copy.
 //But only while they’re here. When they leave, throw it away.
 //When your controller (like PalletsController) needs access to a database (AppDbContext), AddScoped() makes sure a new database connection is provided for every HTTP request.

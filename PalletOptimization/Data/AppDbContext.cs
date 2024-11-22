@@ -3,14 +3,15 @@ using PalletOptimization.Models;
 
 namespace PalletOptimization.Data
 {
-    //Inherits from DbContext which is part of EntityFramework   
-    //This class is like a bridge between the database and C#
+    // Inherits from DbContext which is part of EntityFramework   
+    // This class is like a bridge between the database and C#
     public class AppDbContext : DbContext
     {
-        //Constructor to initialize DbContext with options
+        // Constructor to initialize DbContext with options
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
-        // Tables for the database you are storing the whole Elements table in DBset
+        // Doesnt contain actual table data until you query it. It just says "there is a table called PalletTypes, use this DbSet to interact with it"
+        // If wew run a query "var palletTypes = context.PalletTypes.ToList(); then DbSet will actually contain the data.
         public DbSet<Elements> Elements { get; set; }
         public DbSet<PalletType> PalletTypes { get; set; }
         public DbSet<PalletGroup> PalletGroups { get; set; }
@@ -19,12 +20,12 @@ namespace PalletOptimization.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Configure Elements
-            //ModelBuilder is responsible for all the mapping. Basically it configures how Elements class maps to the database.
+            // ModelBuilder is responsible for all the mapping. Basically it configures how Elements class maps to the database.
             modelBuilder.Entity<Elements>(entity =>
             {
-                //We are checking if the Elements table has a key. 
-                entity.HasKey(e => e.Id); //EntityFramework tells SQL Server to create a PK constraint on the Id column in the db.
-                //The => means take the object (e) of type (Elements) access its Id and use it as a primary key.
+                // We are checking if the Elements table has a key. 
+                entity.HasKey(e => e.Id); // EntityFramework tells SQL Server to create a PK constraint on the Id column in the db.
+                // The => means take the object (e) of type (Elements) access its Id and use it as a primary key.
                 entity.Property(e => e.Length).IsRequired(); 
                 entity.Property(e => e.Width).IsRequired();
                 entity.Property(e => e.Height).IsRequired();
