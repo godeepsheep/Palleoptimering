@@ -106,8 +106,12 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 3,
           "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
+            },
             {
               "$type": "Document",
               "DocumentIndex": 3,
@@ -118,8 +122,7 @@
               "RelativeToolTip": "Controllers\\ElementsController.cs",
               "ViewState": "AgIAABAAAAAAAAAAAAAQwBcAAAAyAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-25T10:14:32.884Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-25T10:14:32.884Z"
             },
             {
               "$type": "Document",
@@ -228,8 +231,7 @@
               "RelativeToolTip": "Controllers\\PalletGroupsController.cs",
               "ViewState": "AgIAAA4AAAAAAAAAAAAAwBoAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-25T09:23:42.567Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-25T09:23:42.567Z"
             },
             {
               "$type": "Document",
@@ -241,8 +243,7 @@
               "RelativeToolTip": "Controllers\\PalletGroupController.cs",
               "ViewState": "AgIAAEQAAAAAAAAAAAAAAFUAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-25T09:16:10.896Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-25T09:16:10.896Z"
             },
             {
               "$type": "Document",
@@ -398,10 +399,6 @@
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-11-18T10:50:07.043Z"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
             }
           ]
         }
