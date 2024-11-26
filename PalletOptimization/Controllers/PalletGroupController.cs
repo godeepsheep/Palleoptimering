@@ -6,6 +6,17 @@ namespace PalletOptimization.Controllers;
 
 public class PalletGroupController
 {
+    /*
+     * 
+     * 
+     * This class is currently Depricated, and is replaced with "PalletGroupsController"
+     * 
+     * 
+     */
+
+
+
+
     private readonly AppDbContext _context;
     //We registered AppDbContext in Program.cs and told it the following: builder.Services.AddDbContext<AppDbContext>
     //The DI looks at the constructor, sees that it needs an AppDbContext, uses the registration in Program.cs to create an AppDbContext and injects it here.
