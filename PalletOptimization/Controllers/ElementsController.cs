@@ -33,11 +33,8 @@ namespace PalletOptimization.Controllers
                 var Elements = await _context.Elements.FirstOrDefaultAsync(m => m.Id == id);
                 elements.Add(Elements);
             }
-           
 
-            //TODO: the elements is a list, and it wants a model. dont know how to add all of them, that will be for another day :D
             return View("Planner", elements);
-
         }
     }
 }

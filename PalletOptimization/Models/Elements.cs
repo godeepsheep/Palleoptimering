@@ -8,8 +8,8 @@ namespace PalletOptimization.Models
         [Key] 
         public int Id { get; set; }
         
-        public RotationOptions RotationOptions { get; set; }
-        public bool SpecialPallet { get; set; }
+        public RotationOptions RotationRules { get; set; }
+        public bool IsSpecial { get; set; }
         public int? MaxElementsPerPallet { get; set; } = null;
         public int Length { get; set; }
         public int Width { get; set; }
