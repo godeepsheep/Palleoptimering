@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using PalletOptimization.Data;
 using PalletOptimization.Models;
 using System.Security.Cryptography;
+using System.Xml.Linq;
 
 namespace PalletOptimization.Controllers
 {
@@ -36,5 +37,11 @@ namespace PalletOptimization.Controllers
 
             return View("Planner", elements);
         }
+
+        public async Task<IActionResult> GeneratePackingPlan()
+        {
+            return View();
+        }
+
     }
 }

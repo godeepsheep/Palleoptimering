@@ -7,7 +7,7 @@
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a class="btn btn-primary" asp-action="Create" style="text-white; border-radius: 5px; background-color:seagreen; color:white; border:none" >Create New</a>
 </p>
 <table class="table">
     <thead>
@@ -49,9 +49,9 @@
                 @Html.DisplayFor(modelItem => item.MaxWeight)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.Id"    style="background-color:greenyellow; border-radius: 5px;border:none; color:black; margin-right:5px;padding:5px;padding-top:2px">Edit</a>
+                    <a class="btn btn-primary" asp-action="Details" asp-route-id="@item.Id" style="background-color:deepskyblue; border-radius: 5px;border:none; color:black; padding:5px; padding-top:2px">Details</a>
+                    <a class="btn btn-primary" asp-action="Delete" asp-route-id="@item.Id"  style="background-color:red;         border-radius: 5px;border:none; color:white; margin-left:5px; padding:5px; padding-top:2px">Delete</a>
             </td>
         </tr>
 }
