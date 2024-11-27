@@ -36,35 +36,6 @@ using (var scope = app.Services.CreateScope())
 {
     // Get AppDbContext instance from the DI container
     var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-
-    try
-    {
-        // Test: Add a new PalletGroup to the database
-        Console.WriteLine("Testing database insertion...");
-        var newPalletGroup = new PalletOptimization.Models.PalletGroup
-        {
-            Length = 1200,
-            Width = 800,
-            Height = 150,
-            BaseWeight = 20,
-            MaxWeight = 5000
-        };
-        context.PalletGroups.Add(newPalletGroup); // Add PalletGroup to the database context
-        context.SaveChanges(); // Save changes to the database
-        Console.WriteLine($"PalletGroup added with ID: {newPalletGroup.Id}");
-
-        // Test: Retrieve and display all PalletGroups from the database
-        var allPalletGroups = context.PalletGroups.ToList();
-        Console.WriteLine("PalletGroups in the database:");
-        foreach (var pallet in allPalletGroups)
-        {
-            Console.WriteLine($"ID: {pallet.Id}, Length: {pallet.Length}, Width: {pallet.Width}, Height: {pallet.Height}, BaseWeight: {pallet.BaseWeight}, BaseMaxWeight: {pallet.MaxWeight}");
-        }
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine($"An error occurred while testing the database: {ex.Message}");
-    }
 }
 
 // Configure the HTTP request pipeline.

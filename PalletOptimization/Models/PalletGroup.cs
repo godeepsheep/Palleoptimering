@@ -6,6 +6,7 @@ namespace PalletOptimization.Models
     {
         [Key] // Auto-increments in the database
         public int Id { get; set; }
+        public string Name { get; set; }
 
         public int Length { get; set; }
         public int Width { get; set; }
