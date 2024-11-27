@@ -19,29 +19,30 @@ namespace PalletOptimization.Controllers
 
         public IActionResult Planner()
         {
-            return View();
+            // Initialize an empty list of elements if no model is passed
+            var elements = new List<Elements>();
+            return View(elements);
         }
 
         public async Task<IActionResult> MakeOrder()
         {
-            List<Elements> elements = new();
-            Random random = new();
-            int x = random.Next(1,15);
-           
-            for (int i = 0; i < x; i++)
+            var elements = new List<Elements>();
+            var random = new Random();
+
+            int count = random.Next(1, 15); // Generate 1-15 random elements
+            for (int i = 0; i < count; i++)
             {
-                int id = random.Next(1, 10);
-                var Elements = await _context.Elements.FirstOrDefaultAsync(m => m.Id == id);
-                elements.Add(Elements);
+                int id = random.Next(1, 10); // Random IDs (assumes 1-10 range)
+                var element = await _context.Elements.FirstOrDefaultAsync(m => m.Id == id);
+                if (element != null)
+                {
+                    elements.Add(element);
+                }
             }
 
-            return View("Planner", elements);
+            return View("Planner", elements); // Pass the list of elements to the view
         }
-
-        public async Task<IActionResult> GeneratePackingPlan()
-        {
-            return View();
-        }
+        
 
     }
 }
