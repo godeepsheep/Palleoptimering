@@ -55,7 +55,8 @@ namespace PalletOptimization.Data
             // Configure PalletGroup
             modelBuilder.Entity<PalletGroup>(entity =>
             {
-                entity.HasKey(pg => pg.Id); 
+                entity.HasKey(pg => pg.Id);
+                entity.Property(pg => pg.Name).IsRequired();
                 entity.Property(pg => pg.Length).IsRequired(); 
                 entity.Property(pg => pg.Width).IsRequired(); 
                 entity.Property(pg => pg.Height).IsRequired(); 

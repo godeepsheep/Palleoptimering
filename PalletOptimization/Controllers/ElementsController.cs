@@ -42,6 +42,8 @@ namespace PalletOptimization.Controllers
 
             return View("Planner", elements); // Pass the list of elements to the view
         }
+
+       
         
 
     }
