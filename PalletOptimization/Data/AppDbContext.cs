@@ -30,6 +30,16 @@ namespace PalletOptimization.Data
                 entity.Property(e => e.Width).IsRequired();
                 entity.Property(e => e.Height).IsRequired();
                 entity.Property(e => e.Weight).IsRequired();
+                
+                //store rotationrules as int
+                entity.Property(e => e.RotationRules)
+                    .HasConversion<int>() // Ensure the enum is stored as an int
+                    .IsRequired();
+                
+                // Map IsSpecial to bit (boolean)
+                entity.Property(e => e.IsSpecial)
+                    .HasColumnType("bit")
+                    .IsRequired();
             });
             
 
