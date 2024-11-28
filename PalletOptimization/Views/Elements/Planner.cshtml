@@ -1,4 +1,6 @@
-﻿@model IEnumerable<PalletOptimization.Models.Elements>
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using PalletOptimization.Enums
+@model IEnumerable<PalletOptimization.Models.Elements>
 
 @{
     ViewData["Title"] = "Planner";
@@ -6,14 +8,15 @@
 
 <h1>Planner</h1>
 
-<div style="display: flex;">
+<div style="display: flex; justify-content: space-between; align-items: flex-start;">
     <!-- Left Side: Elements Table -->
     <div style="width: 60%; margin-right: 20px;border: 1px solid; border-radius:5px; border-color: aqua;">
         @if (Model?.Count() > 0)
-        {
+        {   
             <table class="table">
                 <thead>
                     <tr>
+                        <th>@Html.DisplayNameFor(model => model.Name)</th>
                         <th>@Html.DisplayNameFor(model => model.RotationRules)</th>
                         <th>@Html.DisplayNameFor(model => model.IsSpecial)</th>
                         <th>@Html.DisplayNameFor(model => model.MaxElementsPerPallet)</th>
@@ -28,21 +31,31 @@
                     @foreach (var item in Model)
                     {
                         <tr>
-                            <td>@Html.DisplayFor(modelItem => item.RotationRules)</td>
+                            <th>@Html.DisplayFor(modelItem => item.Name)</th>
+                            <td>
+                                <form asp-action="UpdateRotationRule" method="post" style="display: inline;">
+                                    <input type="hidden" name="ElementId" value="@item.Id" />
+                                    <select class="form-control" name="SelectedRotationRule">
+                                        @foreach (var option in Enum.GetValues(typeof(RotationOptions)).Cast<RotationOptions>())
+                                        {
+                                        <option
+                                            value="@((int)option)"
+                                            selected="@(item.RotationRules == option ? "selected" : null)">
+                                            @option
+                                        </option>
+                                        }
+                                    </select>   
+                                </form>
+                            </td>
+
+
                             <td>@Html.DisplayFor(modelItem => item.IsSpecial)</td>
                             <td>@Html.DisplayFor(modelItem => item.MaxElementsPerPallet)</td>
                             <td>@Html.DisplayFor(modelItem => item.Length)</td>
                             <td>@Html.DisplayFor(modelItem => item.Width)</td>
                             <td>@Html.DisplayFor(modelItem => item.Height)</td>
                             <td>@Html.DisplayFor(modelItem => item.Weight)</td>
-                            <td>
-                                <form asp-action="CustomizeElement" method="get">
-                                    <input type="hidden" name="ElementId" value="@item.Id" />
-                                    <button type="submit" style="padding: 2px 5px;background-color: #BB00AA; color: white; border-radius: 5px; cursor: pointer;">
-                                        Customize
-                                    </button>
-                                </form>
-                            </td>
+                            
                         </tr>
                     }
                 </tbody>
@@ -66,7 +79,7 @@
 
     <!-- Right Side: Pallet Customization Form -->
     <div style="width: 40%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
-        <h3>Pallet Customization</h3>
+        <h3 id="CustomizePallet">Pallet Customization</h3>
         <form>
             <div class="mb-3">
                 <label for="MaxHeight" class="form-label">Max Height for Pallet + Element (mm)</label>
@@ -86,13 +99,6 @@
             <div class="mb-3">
                 <label for="SpaceBetween" class="form-label">Space Between Elements (mm)</label>
                 <input type="number" class="form-control" id="SpaceBetween" placeholder="Enter space between elements">
-            </div>
-
-            <div class="form-check mb-3">
-                <input class="form-check-input" type="checkbox" id="IsSpecialPallet">
-                <label class="form-check-label" for="IsSpecialPallet">
-                    Is this a special pallet?
-                </label>
             </div>
 
             <div class="mb-3">

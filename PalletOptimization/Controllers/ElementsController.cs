@@ -4,6 +4,7 @@ using PalletOptimization.Data;
 using PalletOptimization.Models;
 using System.Security.Cryptography;
 using System.Xml.Linq;
+using PalletOptimization.Enums;
 
 namespace PalletOptimization.Controllers
 {
@@ -32,7 +33,7 @@ namespace PalletOptimization.Controllers
             int count = random.Next(1, 15); // Generate 1-15 random elements
             for (int i = 0; i < count; i++)
             {
-                int id = random.Next(1, 10); // Random IDs (assumes 1-10 range)
+                int id = random.Next(21, 40); // Random IDs (assumes 1-10 range)
                 var element = await _context.Elements.FirstOrDefaultAsync(m => m.Id == id);
                 if (element != null)
                 {
@@ -41,6 +42,21 @@ namespace PalletOptimization.Controllers
             }
 
             return View("Planner", elements); // Pass the list of elements to the view
+        }
+
+        [HttpPost]
+        public IActionResult UpdateRotationRule(int ElementId, RotationOptions SelectedRotationRule, List<Elements> elements)
+        {
+            // Find the element to update
+            var element = elements.FirstOrDefault(e => e.Id == ElementId);
+            if (element != null)
+            {
+                // Update the RotationRules value
+                element.RotationRules = SelectedRotationRule;
+            }
+
+            // Return the updated list to the view
+            return RedirectToAction("Planner", new { elements });
         }
 
        

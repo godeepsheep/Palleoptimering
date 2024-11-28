@@ -26,6 +26,7 @@ namespace PalletOptimization.Data
                 // We are checking if the Elements table has a key. 
                 entity.HasKey(e => e.Id); // EntityFramework tells SQL Server to create a PK constraint on the Id column in the db.
                 // The => means take the object (e) of type (Elements) access its Id and use it as a primary key.
+                entity.Property(e => e.Name).IsRequired(); 
                 entity.Property(e => e.Length).IsRequired(); 
                 entity.Property(e => e.Width).IsRequired();
                 entity.Property(e => e.Height).IsRequired();
