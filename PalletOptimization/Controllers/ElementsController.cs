@@ -43,7 +43,7 @@ namespace PalletOptimization.Controllers
 
             return View("Planner", elements); // Pass the list of elements to the view
         }
-
+        
         [HttpPost]
         public IActionResult UpdateRotationRule(int ElementId, RotationOptions SelectedRotationRule, List<Elements> elements)
         {
@@ -58,7 +58,7 @@ namespace PalletOptimization.Controllers
             // Return the updated list to the view
             return RedirectToAction("Planner", new { elements });
         }
-
+        
        
         
 

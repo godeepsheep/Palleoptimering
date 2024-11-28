@@ -58,7 +58,7 @@ namespace PalletOptimization.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Length,Width,Height,BaseWeight,MaxWeight")] PalletGroup palletGroup)
+        public async Task<IActionResult> Create([Bind("Name,Id,Length,Width,Height,BaseWeight,MaxWeight")] PalletGroup palletGroup)
         {
             if (ModelState.IsValid)
             {
@@ -90,7 +90,7 @@ namespace PalletOptimization.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Length,Width,Height,BaseWeight,MaxWeight")] PalletGroup palletGroup)
+        public async Task<IActionResult> Edit(int id, [Bind("Name,Id,Length,Width,Height,BaseWeight,MaxWeight")] PalletGroup palletGroup)
         {
             if (id != palletGroup.Id)
             {

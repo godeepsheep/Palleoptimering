@@ -8,7 +8,7 @@
 
         public static int Id { get; set; } 
                 
-        // Descstatic ription of the packed pallet
+        // Description of the packed pallet
         public static string? PalletDescription { get; set; }
 
         public static int Length { get; set; } = 1000;// Total length (mm)
@@ -21,15 +21,21 @@
         public static int MaxOverhang { get; set; } = 0; // Allowable overhang (mm)
         public static int SlotsOnPallet { get; set; } = 5; // Number of slots for elements
         public static int SpaceBetweenElements { get; set; } // Spacing between elements (mm)
-                
+        
         // Group, Type, Special details
+
+        // Group, Type, Special details
+
         public static bool SpecialPallet { get; set; } = false; // Is it a special pallet?
         public static string? PalletGroup { get; set; } 
         public static string PalletType { get; set; } = string.Empty; 
                 
         public static bool Active { get; set; } = false; 
-                
+        
         // List of elements stacked on the pallet
+
+        // List of elements stacked on the pallet
+
         public static List<Elements> Elements { get; set; } = new List<Elements>();
     }
 }
