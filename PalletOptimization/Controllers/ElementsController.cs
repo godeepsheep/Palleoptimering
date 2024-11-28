@@ -45,21 +45,17 @@ namespace PalletOptimization.Controllers
         }
         
         [HttpPost]
-        public IActionResult UpdateRotationRule(int ElementId, RotationOptions SelectedRotationRule, List<Elements> elements)
-        {
-            // Find the element to update
-            var element = elements.FirstOrDefault(e => e.Id == ElementId);
-            if (element != null)
-            {
-                // Update the RotationRules value
-                element.RotationRules = SelectedRotationRule;
-            }
+        public IActionResult UpdateRotationRule(Elements element, RotationOptions selectedRotationRule, List<Elements> elements)
+        {   
+            
+            // Update the RotationRules value
+            element.RotationRules = selectedRotationRule;
+            
 
             // Return the updated list to the view
             return RedirectToAction("Planner", new { elements });
         }
         
-       
         
 
     }

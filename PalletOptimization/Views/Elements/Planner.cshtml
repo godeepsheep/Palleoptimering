@@ -32,9 +32,10 @@
                     {
                         <tr>
                             <th>@Html.DisplayFor(modelItem => item.Name)</th>
+                            <!-- Rotation Rules Drop Down -->
                             <td>
                                 <form asp-action="UpdateRotationRule" method="post" style="display: inline;">
-                                    <input type="hidden" name="ElementId" value="@item.Id" />
+                                    <input type="hidden" name="ElementId" value="@item" />
                                     <select class="form-control" name="SelectedRotationRule">
                                         @foreach (var option in Enum.GetValues(typeof(RotationOptions)).Cast<RotationOptions>())
                                         {

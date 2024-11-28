@@ -26,7 +26,6 @@ builder.Services.AddScoped<PalletGroupController>(); //Here we are adding a pall
 //When your controller (like PalletsController) needs access to a database (AppDbContext), AddScoped() makes sure a new database connection is provided for every HTTP request.
 //While CreateScope() isnt tied to an HTTP request, so any background services or tests. 
 
-
 //Builds the application
 var app = builder.Build();
 
