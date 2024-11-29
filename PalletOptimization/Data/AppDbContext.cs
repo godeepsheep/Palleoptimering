@@ -41,6 +41,10 @@ namespace PalletOptimization.Data
                 entity.Property(e => e.IsSpecial)
                     .HasColumnType("bit")
                     .IsRequired();
+
+                entity.Property(e => e.HeightWidthFactor)
+                    .HasColumnType("float")
+                    .IsRequired(false);
             });
             
 

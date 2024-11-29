@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.Build.Framework;
 using PalletOptimization.Enums;
 
 namespace PalletOptimization.Models
@@ -16,5 +17,7 @@ namespace PalletOptimization.Models
         public int Width { get; set; }
         public int Height { get; set; }
         public int Weight { get; set; }
+        public double? HeightWidthFactor { get; set; }
+              
     }
 }

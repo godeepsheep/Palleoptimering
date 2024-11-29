@@ -1,6 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
 @using PalletOptimization.Enums
-@model IEnumerable<PalletOptimization.Models.Elements>
+@model IEnumerable<PalletOptimization.Models.CombinedModel>
 
 @{
     ViewData["Title"] = "Planner";
@@ -10,20 +10,21 @@
 
 <div style="display: flex; justify-content: space-between; align-items: flex-start;">
     <!-- Left Side: Elements Table -->
-    <div style="width: 60%; margin-right: 20px;border: 1px solid; border-radius:5px; border-color: aqua;">
+    <div class="container-fluid" style="width: 60%; margin-right: 20px;border: 1px solid; border-radius:5px; border-color: aqua;">
         @if (Model?.Count() > 0)
         {   
             <table class="table">
                 <thead>
                     <tr>
-                        <th>@Html.DisplayNameFor(model => model.Name)</th>
-                        <th>@Html.DisplayNameFor(model => model.RotationRules)</th>
-                        <th>@Html.DisplayNameFor(model => model.IsSpecial)</th>
-                        <th>@Html.DisplayNameFor(model => model.MaxElementsPerPallet)</th>
-                        <th>@Html.DisplayNameFor(model => model.Length) (mm)</th>
-                        <th>@Html.DisplayNameFor(model => model.Width) (mm)</th>
-                        <th>@Html.DisplayNameFor(model => model.Height) (mm)</th>
-                        <th>@Html.DisplayNameFor(model => model.Weight) (Kg)</th>
+                        <th>@Html.DisplayNameFor(model => model.Elements.Name)</th>
+                        <th>@Html.DisplayNameFor(model => model.Elements.RotationRules)</th>
+                        <th>@Html.DisplayNameFor(model => model.Elements.IsSpecial)</th>
+                        <th>@Html.DisplayNameFor(model => model.Elements.MaxElementsPerPallet)</th>
+                        <th>@Html.DisplayNameFor(model => model.Elements.Length) (mm)</th>
+                        <th>@Html.DisplayNameFor(model => model.Elements.Width) (mm)</th>
+                        <th>@Html.DisplayNameFor(model => model.Elements.Height) (mm)</th>
+                        <th>@Html.DisplayNameFor(model => model.Elements.Weight) (Kg)</th>
+                        <th>@Html.DisplayNameFor(model => model.Elements.HeightWidthFactor) (idk)</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -31,37 +32,39 @@
                     @foreach (var item in Model)
                     {
                         <tr>
-                            <th>@Html.DisplayFor(modelItem => item.Name)</th>
+                            <th>@Html.DisplayFor(modelItem => item.Elements.Name)</th>
                             <!-- Rotation Rules Drop Down -->
                             <td>
-                                <form asp-action="UpdateRotationRule" method="post" style="display: inline;">
+                                <form asp-action="UpdateRotationRuleTest" asp-route-element="@item" asp-route-elements="Model" method="post" style="display: inline;">
                                     <input type="hidden" name="ElementId" value="@item" />
                                     <select class="form-control" name="SelectedRotationRule">
                                         @foreach (var option in Enum.GetValues(typeof(RotationOptions)).Cast<RotationOptions>())
                                         {
                                         <option
                                             value="@((int)option)"
-                                            selected="@(item.RotationRules == option ? "selected" : null)">
+                                                    selected="@(item.Elements.RotationRules == option ? "selected" : null)">
                                             @option
                                         </option>
                                         }
                                     </select>   
+                                    <input type="submit" />
                                 </form>
                             </td>
 
 
-                            <td>@Html.DisplayFor(modelItem => item.IsSpecial)</td>
-                            <td>@Html.DisplayFor(modelItem => item.MaxElementsPerPallet)</td>
-                            <td>@Html.DisplayFor(modelItem => item.Length)</td>
-                            <td>@Html.DisplayFor(modelItem => item.Width)</td>
-                            <td>@Html.DisplayFor(modelItem => item.Height)</td>
-                            <td>@Html.DisplayFor(modelItem => item.Weight)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Elements.IsSpecial)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Elements.MaxElementsPerPallet)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Elements.Length)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Elements.Width)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Elements.Height)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Elements.Weight)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Elements.HeightWidthFactor)</td>
                             
                         </tr>
                     }
                 </tbody>
             </table>
-            <div style="text-align: right; margin-top: 10px;">
+            <div style="text-align: right; margin-top: 10px; margin-bottom: 10px;">
                 <a asp-action="GeneratePackingPlan" class="btn" style="padding: 10px 20px; background-color: #00BB33; color: white; border-radius: 5px; cursor: pointer; margin-right: 10px; ">
                     Get Packing Plan!
                 </a>
@@ -71,58 +74,60 @@
         {
             <p>No order loaded, want to add a random one?</p>
             <div style="margin-top: 10px;">
-                <a asp-action="MakeOrder" style="padding: 10px 20px; background-color: #007BFF; color: white; border-radius: 5px; cursor: pointer;">
+                <a class="btn" asp-action="MakeOrder" style="padding: 10px 20px; margin-bottom:10px; background-color: #007BFF; color: white; border-radius: 5px; cursor: pointer;">
                     Generate order
                 </a>
             </div>
         }
     </div>
+   
 
-    <!-- Right Side: Pallet Customization Form -->
-    <div style="width: 40%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
-        <h3 id="CustomizePallet">Pallet Customization</h3>
-        <form>
+        <!-- Right Side: Pallet Customization Form -->
+        <div style="width: 40%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+            <h3 id="CustomizePallet">Pallet Customization</h3>
+        <form asp-action="SavePalletSettings" method="post">
             <div class="mb-3">
                 <label for="MaxHeight" class="form-label">Max Height for Pallet + Element (mm)</label>
-                <input type="number" class="form-control" id="MaxHeight" placeholder="Enter max height">
+                <input name="MaxHeight" type="number" class="form-control" id="MaxHeight" value="@(Pallets.MaxHeight)">
             </div>
 
             <div class="mb-3">
                 <label for="MaxWeight" class="form-label">Max Weight (kg)</label>
-                <input type="number" class="form-control" id="MaxWeight" placeholder="Enter max weight">
+                <input name="MaxWeight" type="number" class="form-control" id="MaxWeight" value="@(Pallets.MaxWeight)">
             </div>
 
             <div class="mb-3">
                 <label for="Overhang" class="form-label">Overhang (mm)</label>
-                <input type="number" class="form-control" id="Overhang" placeholder="Enter overhang">
+                <input name="Overhang" type="number" class="form-control" id="Overhang" value=@(Pallets.MaxOverhang)>
             </div>
 
             <div class="mb-3">
                 <label for="SpaceBetween" class="form-label">Space Between Elements (mm)</label>
-                <input type="number" class="form-control" id="SpaceBetween" placeholder="Enter space between elements">
+                <input name="SpaceBetween" type="number" class="form-control" id="SpaceBetween" value="@(Pallets.SpaceBetweenElements)">
             </div>
 
             <div class="mb-3">
                 <label for="StackingHeight" class="form-label">Allow Stacking Up to (mm)</label>
-                <input type="number" class="form-control" id="StackingHeight" placeholder="Enter stacking height">
+                <input name="StackingHeight" type="number" class="form-control" id="StackingHeight" value="@(Pallets.StackingMaxHeight)">
             </div>
 
             <div class="mb-3">
                 <label for="StackingWeight" class="form-label">Allow Stacking Up to (kg)</label>
-                <input type="number" class="form-control" id="StackingWeight" placeholder="Enter stacking weight">
+                <input name="StackingWeight" type="number" class="form-control" id="StackingWeight" value="@(Pallets.StackingMaxWeight)">
             </div>
 
             <div class="mb-3">
                 <label for="AddedPlate" class="form-label">Added Plate on Side (mm)</label>
-                <input type="number" class="form-control" id="AddedPlate" placeholder="Enter added plate thickness">
+                <input name="AddedPlate" type="number" class="form-control" id="AddedPlate" value="@(Pallets.Endplate)">
             </div>
 
             <div class="mb-3">
-                <label for="MaxPalletSpace" class="form-label">Max Amount of Space on Pallet (mm²)</label>
-                <input type="number" class="form-control" id="MaxPalletSpace" placeholder="Enter max space">
+                <label for="MaxPalletSpace" class="form-label">Max Amount of slots on Pallet (slots)</label>
+                <input name="MaxPalletSpace" type="number" class="form-control" id="MaxPalletSpace" value="@(Pallets.SlotsOnPallet)">
             </div>
 
-            <button type="button" class="btn btn-primary">Save Pallet Settings</button>
+            <button type="submit" class="btn btn-primary">Save Pallet Settings</button>
         </form>
-    </div>
+        </div>
+       
 </div>
