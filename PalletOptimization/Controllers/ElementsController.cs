@@ -5,6 +5,7 @@ using PalletOptimization.Models;
 using System.Security.Cryptography;
 using System.Text.Json;
 using PalletOptimization.Enums;
+using Azure.Identity;
 
 namespace PalletOptimization.Controllers
 {
@@ -25,12 +26,14 @@ namespace PalletOptimization.Controllers
                 : JsonSerializer.Deserialize<List<Elements>>(elementsJson);
 
             ViewBag.RotationOptions = Enum.GetValues(typeof(RotationOptions)).Cast<RotationOptions>().ToList();
+            // Initialize an empty list of elements if no model is passed
+            var elements = new List<CombinedModel>();
             return View(elements);
         }
 
         public async Task<IActionResult> MakeOrder()
         {
-            var elements = new List<Elements>();
+            var combinedModel = new List<CombinedModel>();
             var random = new Random();
 
             int count = random.Next(1, 15); // Generate 1-15 random elements
@@ -63,6 +66,18 @@ namespace PalletOptimization.Controllers
             HttpContext.Session.SetString("Elements", JsonSerializer.Serialize(elements));
 
             return RedirectToAction("Planner");
+                int id = random.Next(41, 60); // Random IDs (assumes 1-10 range)
+                var element = await _context.Elements.FirstOrDefaultAsync(m => m.Id == id);
+                if (element != null)
+                {
+                    CombinedModel combined = new CombinedModel();
+                    combined.Elements = element;
+                    combinedModel.Add(combined);
+                }
+            }
+
+            return View("Planner", combinedModel); // Pass the list of elements to the view
+
         }
 
         [HttpPost]
@@ -112,5 +127,20 @@ namespace PalletOptimization.Controllers
 
             return RedirectToAction("Planner");
         }
+       
+
+        [HttpPost] 
+        public void SavePalletSettings() //IT FUCKING WORKS BOI
+        {
+            
+            Pallets.MaxHeight             = int.Parse(Request.Form["MaxHeight"]);
+            Pallets.MaxWeight             = int.Parse(Request.Form["MaxWeight"]);
+            Pallets.MaxOverhang           = int.Parse(Request.Form["Overhang"]);
+            Pallets.SpaceBetweenElements  = int.Parse(Request.Form["SpaceBetween"]);
+            Pallets.StackingMaxHeight     = int.Parse(Request.Form["StackingHeight"]);
+            Pallets.StackingMaxWeight     = int.Parse(Request.Form["StackingWeight"]);
+            Pallets.Endplate              = int.Parse(Request.Form["AddedPlate"]);
+            Pallets.MaxHeight             = int.Parse(Request.Form["MaxPalletSpace"]);
+        }
     }
-}
+
