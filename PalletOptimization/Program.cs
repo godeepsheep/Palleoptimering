@@ -10,6 +10,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddDistributedMemoryCache(); // Enable in-memory cache for sessions
+builder.Services.AddSession(); // Enable session handling
 
 // Added the .env as Server_Password, Used dependency injection(DI) to manage AppDbContext, instead of manually creating it as an object each time.
 // The "options" represent an instance of DbContextOptionsBuilder its a class from EntityFrameworkCore to set up database stuff. 
@@ -48,6 +50,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthorization();
+app.UseSession(); // Middleware to handle sessions
 
 app.MapControllerRoute(
     name: "default",

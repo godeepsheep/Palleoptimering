@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using PalletOptimization.Enums;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PalletOptimization.Models
 {
@@ -7,6 +8,9 @@ namespace PalletOptimization.Models
     {
         [Key] 
         public int Id { get; set; }
+        
+        [NotMapped]
+        public Guid InstanceId { get; set; } = Guid.NewGuid(); // Unique id for each instance in an order (saved in memory) 
         
         public string Name { get; set; }
         public RotationOptions RotationRules { get; set; }
@@ -16,5 +20,7 @@ namespace PalletOptimization.Models
         public int Width { get; set; }
         public int Height { get; set; }
         public int Weight { get; set; }
+        
+        public double? HeightWidthFactor { get; set; }
     }
 }
