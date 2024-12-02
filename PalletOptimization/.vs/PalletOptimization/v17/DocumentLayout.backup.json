@@ -7,8 +7,20 @@
       "RelativeMoniker": "D:0:0:{A8241C04-BD40-4ADE-AB05-01246CC7F148}|PalletOptimization.csproj|solutionrelative:controllers\\elementscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A8241C04-BD40-4ADE-AB05-01246CC7F148}|PalletOptimization.csproj|c:\\users\\mark\\documents\\github\\palleoptimering\\palletoptimization\\models\\pallets.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A8241C04-BD40-4ADE-AB05-01246CC7F148}|PalletOptimization.csproj|solutionrelative:models\\pallets.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A8241C04-BD40-4ADE-AB05-01246CC7F148}|PalletOptimization.csproj|c:\\users\\mark\\documents\\github\\palleoptimering\\palletoptimization\\views\\elements\\planner.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A8241C04-BD40-4ADE-AB05-01246CC7F148}|PalletOptimization.csproj|solutionrelative:views\\elements\\planner.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A8241C04-BD40-4ADE-AB05-01246CC7F148}|PalletOptimization.csproj|c:\\users\\mark\\documents\\github\\palleoptimering\\palletoptimization\\models\\elements.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A8241C04-BD40-4ADE-AB05-01246CC7F148}|PalletOptimization.csproj|solutionrelative:models\\elements.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A8241C04-BD40-4ADE-AB05-01246CC7F148}|PalletOptimization.csproj|c:\\users\\mark\\documents\\github\\palleoptimering\\palletoptimization\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A8241C04-BD40-4ADE-AB05-01246CC7F148}|PalletOptimization.csproj|solutionrelative:controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A8241C04-BD40-4ADE-AB05-01246CC7F148}|PalletOptimization.csproj|c:\\users\\mark\\documents\\github\\palleoptimering\\palletoptimization\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A8241C04-BD40-4ADE-AB05-01246CC7F148}|PalletOptimization.csproj|solutionrelative:views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A8241C04-BD40-4ADE-AB05-01246CC7F148}|PalletOptimization.csproj|c:\\users\\mark\\documents\\github\\palleoptimering\\palletoptimization\\models\\palletgroup.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -25,14 +37,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{A8241C04-BD40-4ADE-AB05-01246CC7F148}|PalletOptimization.csproj|c:\\users\\mark\\documents\\github\\palleoptimering\\palletoptimization\\controllers\\palletgroupcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A8241C04-BD40-4ADE-AB05-01246CC7F148}|PalletOptimization.csproj|solutionrelative:controllers\\palletgroupcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A8241C04-BD40-4ADE-AB05-01246CC7F148}|PalletOptimization.csproj|c:\\users\\mark\\documents\\github\\palleoptimering\\palletoptimization\\models\\elements.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A8241C04-BD40-4ADE-AB05-01246CC7F148}|PalletOptimization.csproj|solutionrelative:models\\elements.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A8241C04-BD40-4ADE-AB05-01246CC7F148}|PalletOptimization.csproj|c:\\users\\mark\\documents\\github\\palleoptimering\\palletoptimization\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{A8241C04-BD40-4ADE-AB05-01246CC7F148}|PalletOptimization.csproj|solutionrelative:views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A8241C04-BD40-4ADE-AB05-01246CC7F148}|PalletOptimization.csproj|c:\\users\\mark\\documents\\github\\palleoptimering\\palletoptimization\\models\\pallettype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -79,7 +83,7 @@
               "RelativeDocumentMoniker": "Controllers\\ElementsController.cs",
               "ToolTip": "C:\\Users\\Mark\\Documents\\GitHub\\Palleoptimering\\PalletOptimization\\Controllers\\ElementsController.cs",
               "RelativeToolTip": "Controllers\\ElementsController.cs",
-              "ViewState": "AgIAAEMAAAAAAAAAAAAEwFYAAAATAAAAAAAAAA==",
+              "ViewState": "AgIAACwAAAAAAAAAAAAgwIIAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-11-25T10:14:32.884Z",
               "IsPinned": true,
@@ -87,7 +91,48 @@
             },
             {
               "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Planner.cshtml",
+              "DocumentMoniker": "C:\\Users\\Mark\\Documents\\GitHub\\Palleoptimering\\PalletOptimization\\Views\\Elements\\Planner.cshtml",
+              "RelativeDocumentMoniker": "Views\\Elements\\Planner.cshtml",
+              "ToolTip": "C:\\Users\\Mark\\Documents\\GitHub\\Palleoptimering\\PalletOptimization\\Views\\Elements\\Planner.cshtml",
+              "RelativeToolTip": "Views\\Elements\\Planner.cshtml",
+              "ViewState": "AgIAAIcAAAAAAAAAAAAAAGQAAAAKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-12-02T13:11:45.633Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 2,
+              "Title": "Elements.cs",
+              "DocumentMoniker": "C:\\Users\\Mark\\Documents\\GitHub\\Palleoptimering\\PalletOptimization\\Models\\Elements.cs",
+              "RelativeDocumentMoniker": "Models\\Elements.cs",
+              "ToolTip": "C:\\Users\\Mark\\Documents\\GitHub\\Palleoptimering\\PalletOptimization\\Models\\Elements.cs",
+              "RelativeToolTip": "Models\\Elements.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAuwBAAAAA5AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-25T10:03:44.32Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "HomeController.cs",
+              "DocumentMoniker": "C:\\Users\\Mark\\Documents\\GitHub\\Palleoptimering\\PalletOptimization\\Controllers\\HomeController.cs",
+              "RelativeDocumentMoniker": "Controllers\\HomeController.cs",
+              "ToolTip": "C:\\Users\\Mark\\Documents\\GitHub\\Palleoptimering\\PalletOptimization\\Controllers\\HomeController.cs",
+              "RelativeToolTip": "Controllers\\HomeController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-02T13:23:28.314Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
               "Title": "PalletGroup.cs",
               "DocumentMoniker": "C:\\Users\\Mark\\Documents\\GitHub\\Palleoptimering\\PalletOptimization\\Models\\PalletGroup.cs",
               "RelativeDocumentMoniker": "Models\\PalletGroup.cs",
@@ -101,19 +146,6 @@
             {
               "$type": "Document",
               "DocumentIndex": 6,
-              "Title": "Elements.cs",
-              "DocumentMoniker": "C:\\Users\\Mark\\Documents\\GitHub\\Palleoptimering\\PalletOptimization\\Models\\Elements.cs",
-              "RelativeDocumentMoniker": "Models\\Elements.cs",
-              "ToolTip": "C:\\Users\\Mark\\Documents\\GitHub\\Palleoptimering\\PalletOptimization\\Models\\Elements.cs",
-              "RelativeToolTip": "Models\\Elements.cs",
-              "ViewState": "AgIAAAMAAAAAAAAAAAAAABQAAAAIAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-25T10:03:44.32Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
               "Title": "Create.cshtml",
               "DocumentMoniker": "C:\\Users\\Mark\\Documents\\GitHub\\Palleoptimering\\PalletOptimization\\Views\\PalletGroups\\Create.cshtml",
               "RelativeDocumentMoniker": "Views\\PalletGroups\\Create.cshtml",
@@ -121,12 +153,11 @@
               "RelativeToolTip": "Views\\PalletGroups\\Create.cshtml",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAsAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-11-29T12:19:14.196Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-29T12:19:14.196Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 10,
               "Title": "ErrorViewModel.cs",
               "DocumentMoniker": "C:\\Users\\Mark\\Documents\\GitHub\\Palleoptimering\\PalletOptimization\\Models\\ErrorViewModel.cs",
               "RelativeDocumentMoniker": "Models\\ErrorViewModel.cs",
@@ -134,25 +165,24 @@
               "RelativeToolTip": "Models\\ErrorViewModel.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-29T13:08:12.667Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-29T13:08:12.667Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 4,
               "Title": "_Layout.cshtml",
               "DocumentMoniker": "C:\\Users\\Mark\\Documents\\GitHub\\Palleoptimering\\PalletOptimization\\Views\\Shared\\_Layout.cshtml",
               "RelativeDocumentMoniker": "Views\\Shared\\_Layout.cshtml",
               "ToolTip": "C:\\Users\\Mark\\Documents\\GitHub\\Palleoptimering\\PalletOptimization\\Views\\Shared\\_Layout.cshtml",
               "RelativeToolTip": "Views\\Shared\\_Layout.cshtml",
-              "ViewState": "AgIAAAwAAAAAAAAAAAAAACQAAAAoAAAAAAAAAA==",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAB8AAAAVAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2024-11-29T11:54:10.984Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 9,
               "Title": "PalletType.cs",
               "DocumentMoniker": "C:\\Users\\Mark\\Documents\\GitHub\\Palleoptimering\\PalletOptimization\\Models\\PalletType.cs",
               "RelativeDocumentMoniker": "Models\\PalletType.cs",
@@ -160,12 +190,11 @@
               "RelativeToolTip": "Models\\PalletType.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-22T08:14:51.673Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-22T08:14:51.673Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 8,
               "Title": "PalletGroupController.cs",
               "DocumentMoniker": "C:\\Users\\Mark\\Documents\\GitHub\\Palleoptimering\\PalletOptimization\\Controllers\\PalletGroupController.cs",
               "RelativeDocumentMoniker": "Controllers\\PalletGroupController.cs",
@@ -173,12 +202,11 @@
               "RelativeToolTip": "Controllers\\PalletGroupController.cs",
               "ViewState": "AgIAAEQAAAAAAAAAAAAAAFUAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-25T09:16:10.896Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-25T09:16:10.896Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 7,
               "Title": "PalletGroupsController.cs",
               "DocumentMoniker": "C:\\Users\\Mark\\Documents\\GitHub\\Palleoptimering\\PalletOptimization\\Controllers\\PalletGroupsController.cs",
               "RelativeDocumentMoniker": "Controllers\\PalletGroupsController.cs",
@@ -186,12 +214,11 @@
               "RelativeToolTip": "Controllers\\PalletGroupsController.cs",
               "ViewState": "AgIAADEAAAAAAAAAAAAkwEAAAAAhAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-25T09:23:42.567Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-25T09:23:42.567Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 15,
               "Title": "_ValidationScriptsPartial.cshtml",
               "DocumentMoniker": "C:\\Users\\Mark\\Documents\\GitHub\\Palleoptimering\\PalletOptimization\\Views\\Shared\\_ValidationScriptsPartial.cshtml",
               "RelativeDocumentMoniker": "Views\\Shared\\_ValidationScriptsPartial.cshtml",
@@ -203,7 +230,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 14,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\Mark\\Documents\\GitHub\\Palleoptimering\\PalletOptimization\\Program.cs",
               "RelativeDocumentMoniker": "Program.cs",
@@ -215,7 +242,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 11,
               "Title": "AppDbContext.cs",
               "DocumentMoniker": "C:\\Users\\Mark\\Documents\\GitHub\\Palleoptimering\\PalletOptimization\\Data\\AppDbContext.cs",
               "RelativeDocumentMoniker": "Data\\AppDbContext.cs",
@@ -223,12 +250,11 @@
               "RelativeToolTip": "Data\\AppDbContext.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAACsAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-20T16:42:47.934Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-20T16:42:47.934Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 13,
               "Title": "dbo.PalletGroups.sql",
               "DocumentMoniker": "ViewDataWindow_MSSQL__/mssql12.unoeuro.com/straysheep_dk_db_palleoptimering/straysheep_dk/SqlTable/dbo.PalletGroups.sql",
               "ToolTip": "ViewDataWindow_MSSQL__/mssql12.unoeuro.com/straysheep_dk_db_palleoptimering/straysheep_dk/SqlTable/dbo.PalletGroups.sql",
@@ -237,7 +263,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 12,
               "Title": "PalletGroupEnum.cs",
               "DocumentMoniker": "C:\\Users\\Mark\\Documents\\GitHub\\Palleoptimering\\PalletOptimization\\Enums\\PalletGroupEnum.cs",
               "RelativeDocumentMoniker": "Enums\\PalletGroupEnum.cs",
@@ -245,27 +271,7 @@
               "RelativeToolTip": "Enums\\PalletGroupEnum.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAPAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-18T11:53:02.968Z",
-              "EditorCaption": ""
-            }
-          ]
-        },
-        {
-          "DockedWidth": 200,
-          "SelectedChildIndex": 0,
-          "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Pallets.cs",
-              "DocumentMoniker": "C:\\Users\\Mark\\Documents\\GitHub\\Palleoptimering\\PalletOptimization\\Models\\Pallets.cs",
-              "RelativeDocumentMoniker": "Models\\Pallets.cs",
-              "ToolTip": "C:\\Users\\Mark\\Documents\\GitHub\\Palleoptimering\\PalletOptimization\\Models\\Pallets.cs",
-              "RelativeToolTip": "Models\\Pallets.cs",
-              "ViewState": "AgIAABUAAAAAAAAAAAAqwBIAAAAjAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-22T08:14:52.612Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-18T11:53:02.968Z"
             }
           ]
         }
