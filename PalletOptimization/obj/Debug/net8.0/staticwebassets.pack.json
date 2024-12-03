@@ -13,6 +13,10 @@
       "PackagePath": "staticwebassets\\favicon.ico"
     },
     {
+      "Id": "C:\\Users\\GoDee\\Desktop\\ExamensProject\\Palleoptimering\\PalletOptimization\\wwwroot\\js\\planner.js",
+      "PackagePath": "staticwebassets\\js\\planner.js"
+    },
+    {
       "Id": "C:\\Users\\GoDee\\Desktop\\ExamensProject\\Palleoptimering\\PalletOptimization\\wwwroot\\js\\site.js",
       "PackagePath": "staticwebassets\\js\\site.js"
     },

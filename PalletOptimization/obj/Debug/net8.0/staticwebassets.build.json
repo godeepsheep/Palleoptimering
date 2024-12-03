@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "el6QKLJngxbIi+3IzGX+GKBxgS/6F/vWvzLswG6uoa0=",
+  "Hash": "oWnhTOaMbudH12QoAleEF1HbPFyjePAy1ZuCEhuiFlE=",
   "Source": "PalletOptimization",
   "BasePath": "_content/PalletOptimization",
   "Mode": "Default",
@@ -91,6 +91,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\favicon.ico"
+    },
+    {
+      "Identity": "C:\\Users\\GoDee\\Desktop\\ExamensProject\\Palleoptimering\\PalletOptimization\\wwwroot\\js\\planner.js",
+      "SourceId": "PalletOptimization",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\GoDee\\Desktop\\ExamensProject\\Palleoptimering\\PalletOptimization\\wwwroot\\",
+      "BasePath": "_content/PalletOptimization",
+      "RelativePath": "js/planner.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\planner.js"
     },
     {
       "Identity": "C:\\Users\\GoDee\\Desktop\\ExamensProject\\Palleoptimering\\PalletOptimization\\wwwroot\\js\\site.js",

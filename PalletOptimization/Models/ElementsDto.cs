@@ -10,6 +10,6 @@ namespace PalletOptimization.Models
         public RotationOptions RotationRules { get; set; }
         public bool IsSpecial { get; set; }
         public int? MaxElementsPerPallet { get; set; }
-        public double? HeightWidthFactor { get; set; }
+        public double HeightWidthFactor { get; set; }
     }
 }

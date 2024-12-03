@@ -21,6 +21,6 @@ namespace PalletOptimization.Models
         public int Height { get; set; }
         public int Weight { get; set; }
         
-        public double? HeightWidthFactor { get; set; }
+        public double HeightWidthFactor { get; set; } = 1.0;
     }
 }
