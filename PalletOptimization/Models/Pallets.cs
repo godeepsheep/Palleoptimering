@@ -29,8 +29,5 @@
         public static int Endplate { get; set; } = 1;
         public static bool Active { get; set; } = false; 
         
-        // List of elements stacked on the pallet
-
-        public static List<Elements> Elements { get; set; } = new List<Elements>();
     }
 }
