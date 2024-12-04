@@ -32,8 +32,9 @@ namespace PalletOptimization.Data
                 entity.Property(e => e.Height).IsRequired();
                 entity.Property(e => e.Weight).IsRequired();
                 entity.Property(e => e.HeightWidthFactor)
-                    .HasColumnType("float") 
-                    .IsRequired(false); 
+                    .HasColumnType("float")
+                    .IsRequired()
+                    .HasDefaultValue(1.0);
                 
                 //store rotation rules as int
                 entity.Property(e => e.RotationRules)
@@ -44,10 +45,6 @@ namespace PalletOptimization.Data
                 entity.Property(e => e.IsSpecial)
                     .HasColumnType("bit")
                     .IsRequired();
-
-                entity.Property(e => e.HeightWidthFactor)
-                    .HasColumnType("float")
-                    .IsRequired(false);
             });
             
 

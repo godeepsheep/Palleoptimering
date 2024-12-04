@@ -4,9 +4,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
 using PalletOptimization.Data;
 using PalletOptimization.Enums;
+
 using PalletOptimization.Models;
 using System.Text.Json;
 using System.Xml.Linq;
+
+using System.Diagnostics;
 
 namespace PalletOptimization.Controllers
 {
@@ -27,6 +30,12 @@ namespace PalletOptimization.Controllers
             var elements = string.IsNullOrEmpty(elementsJson)
                 ? new List<Elements>()
                 : JsonSerializer.Deserialize<List<Elements>>(elementsJson);
+            
+            Debug.WriteLine("Elements in Planner:");
+                foreach (var element in elements)
+                {
+                        Debug.WriteLine($"InstanceId: {element.InstanceId}, RotationRules: {element.RotationRules}");
+                }
 
             ViewBag.RotationOptions = Enum.GetValues(typeof(RotationOptions)).Cast<RotationOptions>().ToList();
             return View(elements);
@@ -56,6 +65,7 @@ namespace PalletOptimization.Controllers
                         Width = element.Width,
                         Height = element.Height,
                         Weight = element.Weight,
+                        HeightWidthFactor = element.HeightWidthFactor,
                         InstanceId = Guid.NewGuid()
                     };
 
@@ -72,49 +82,47 @@ namespace PalletOptimization.Controllers
         [HttpPost]
         public IActionResult SaveAllElements(Dictionary<Guid, ElementsDto> elements)
         {
-            // Log received elements for debugging
-            Console.WriteLine("Received Elements for Update:");
+            Debug.WriteLine("Received Elements for Update:");
             foreach (var updatedElement in elements)
             {
-                Console.WriteLine($"InstanceId: {updatedElement.Key}, RotationRules: {updatedElement.Value.RotationRules}, IsSpecial: {updatedElement.Value.IsSpecial}, MaxElementsPerPallet: {updatedElement.Value.MaxElementsPerPallet}, HeightWidthFactor: {updatedElement.Value.HeightWidthFactor}");
+                Debug.WriteLine($"InstanceId: {updatedElement.Key}, RotationRules: {updatedElement.Value.RotationRules}, IsSpecial: {updatedElement.Value.IsSpecial}, MaxElementsPerPallet: {updatedElement.Value.MaxElementsPerPallet}");
             }
-
+        
+            // Get the current elements from the session
             var elementsJson = HttpContext.Session.GetString("Elements");
             var currentElements = string.IsNullOrEmpty(elementsJson)
                 ? new List<Elements>()
                 : JsonSerializer.Deserialize<List<Elements>>(elementsJson);
-
-            // Log current elements for debugging
-            Console.WriteLine("Current Elements before update:");
-            foreach (var element in currentElements)
-            {
-                Console.WriteLine($"InstanceId: {element.InstanceId}, Name: {element.Name}, RotationRules: {element.RotationRules}, IsSpecial: {element.IsSpecial}, MaxElementsPerPallet: {element.MaxElementsPerPallet}, HeightWidthFactor: {element.HeightWidthFactor}");
-            }
-
-            // Iterate through the updated elements and update them in the list
+        
+            // Update the elements based on the received data
             foreach (var updatedElement in elements.Values)
             {
                 var existingElement = currentElements.FirstOrDefault(e => e.InstanceId == updatedElement.InstanceId);
                 if (existingElement != null)
                 {
+                    Debug.WriteLine($"InstanceId {updatedElement.InstanceId} not found in currentElements.");
+
+                    Debug.WriteLine($"Before Update - InstanceId: {existingElement.InstanceId}, RotationRules: {existingElement.RotationRules}");
                     existingElement.RotationRules = updatedElement.RotationRules;
-                    existingElement.IsSpecial = updatedElement.IsSpecial;
-                    existingElement.MaxElementsPerPallet = updatedElement.MaxElementsPerPallet;
-                    existingElement.HeightWidthFactor = updatedElement.HeightWidthFactor;
+                    Debug.WriteLine($"After Update - InstanceId: {existingElement.InstanceId}, RotationRules: {existingElement.RotationRules}");
+
+                    existingElement.IsSpecial = updatedElement.IsSpecial;         // Update IsSpecial
+                    existingElement.MaxElementsPerPallet = updatedElement.MaxElementsPerPallet; // Update MaxElementsPerPallet
                 }
             }
+        
+            // Save the updated elements back to the session
+            Debug.WriteLine($"Session data before saving: {JsonSerializer.Serialize(currentElements)}");
 
-            // Save the updated list back to the session
             HttpContext.Session.SetString("Elements", JsonSerializer.Serialize(currentElements));
-
-            // Log updated elements for verification
-            Console.WriteLine("Updated Elements List:");
+        
+            Debug.WriteLine("Updated Elements List:");
             foreach (var element in currentElements)
             {
-                Console.WriteLine($"InstanceId: {element.InstanceId}, Name: {element.Name}, RotationRules: {element.RotationRules}, IsSpecial: {element.IsSpecial}, MaxElementsPerPallet: {element.MaxElementsPerPallet}, HeightWidthFactor: {element.HeightWidthFactor}");
+                Debug.WriteLine($"InstanceId: {element.InstanceId}, RotationRules: {element.RotationRules}, IsSpecial: {element.IsSpecial}, MaxElementsPerPallet: {element.MaxElementsPerPallet}");
             }
-
-            return RedirectToAction("Planner");
+        
+            return Json(new { success = true, message = "Elements updated successfully!" });
         }
 
 
