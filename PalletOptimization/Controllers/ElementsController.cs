@@ -1,16 +1,20 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Azure;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
 using PalletOptimization.Data;
-using PalletOptimization.Models;
-using System.Security.Cryptography;
-using System.Text.Json;
 using PalletOptimization.Enums;
+using PalletOptimization.Models;
+using System.Text.Json;
+using System.Xml.Linq;
 
 namespace PalletOptimization.Controllers
 {
     public class ElementsController : Controller
     {
         private readonly AppDbContext _context;
+        public List<PackedPallet> packedPallets = new();
+        private List<TaggedItem> taggedItemsList = new();
 
         public ElementsController(AppDbContext context)
         {
@@ -128,6 +132,128 @@ namespace PalletOptimization.Controllers
             Pallets.Endplate = int.Parse(Request.Form["AddedPlate"]);
             Pallets.MaxHeight = int.Parse(Request.Form["MaxPalletSpace"]);
         }
+
+
+
+
+
+
+        //______________________________________________________________________________________
+        //The Algorithm
+        //______________________________________________________________________________________
+        public void PreSortElements(List<Elements> inputList)
+        {
+            foreach (Elements element in inputList)
+            {
+                //get a list of all tags to be used later.
+                //TODO: use it later.
+                if (element.tag != null)
+                {
+                    if (element.IsSpecial)
+                    {
+                        taggedItemsList.Add(new TaggedItem { tag = element.tag, taggedElement = element, special = true });
+                        inputList.Remove(element);
+                    }
+                    else
+                    {
+                        taggedItemsList.Add(new TaggedItem { tag = element.tag, taggedElement = element });
+                        inputList.Remove(element);
+                    }
+                    continue;
+                }
+                //if an element is special, remove it from the list of pallets to be sorted, as it will get its own.
+                if (element.IsSpecial)
+                {
+                    packedPallets.Add(new PackedPallet { elementsOnPallet = new List<Elements> { element }, specialPallet = true });
+                    inputList.Remove(element);
+                    continue;
+                }
+            }
+            SortIntoSizes(inputList);
+        }
+
+        public void SortIntoSizes(List<Elements> PreSortedList)
+        {
+            //make the list containing lists. there's a list on the class "PalletSizeList".
+            List<PalletSizeList> PalletSizes = new();
+            _context.PalletGroups.ToList().ForEach(p => PalletSizes.Add(new PalletSizeList { group = p }));
+
+            //sort the inputlist into the different smallest pallet it can be on.
+            foreach (Elements element in PreSortedList)
+            {
+                //start with high number, so the first call will set it to the first pallets length.
+                //The default value is 0, and nothing is smaller than that, so we need to set it high first.
+                int SmallestLength = 100000;
+                int index = -1;
+
+                for (int j = 0; j < PalletSizes.Count; j++)
+                {
+                    //max overhang added on the pallet length, to get the longest the element can stick out over the pallet.
+                    if (element.Length < PalletSizes[j].group.Length + Pallets.MaxOverhang && SmallestLength > PalletSizes[j].group.Length)
+                    {
+                        SmallestLength = PalletSizes[j].group.Length;
+                        index = j;
+                    }
+                }
+                //if the if statement didn't get run in the for loop, then dont add the element, and just print out an error.
+                if (index != -1)
+                    PalletSizes[index].ElementsFitOnPallet.Add(element);
+                else
+                    System.Diagnostics.Debug.WriteLine("No pallet fit the element");
+            }
+            //from here, the inputs are sorted into lists of the pallets they fit on.
+
+            //next step is sorting them into pallets, hard part is the maxElementsPerPallet (MEPP) rule should be respected, but also the total width of the pallet.
+            //also, how does an element with 5 MEPP work with a 2 MEPP element? Need to talk about how we handle this coming part.
+            //should we sort the duplicate elements first, and look at the MEPP, or do we mix elements with different MEPP. And in that case, how would that work?
+            //if we have 2 MEPP and 5 MEPP, do we have one of the 2 MEPP, and just one of the 5 MEPP. so in other words, respect the lowest number?
+            
+            NextStep(PalletSizes);
+        }
+
+        public void NextStep(List<PalletSizeList> PalletSizes)
+        {
+            //TODO: look at how many elements can be on one pallet. Rotation will come after they have their pallets, as the width wont change with rotation.
+           
+        }
+
+
+        public void Output()
+        {
+            //This is a very rough draft of how the output method would look. Writing some of it now to visualise how we will handle the special pallets.
+            //normal pallets first,then special pallets later
+            List<PackedPallet> specialPallets = new();
+            foreach (PackedPallet packedPallet in packedPallets)
+            {
+                if (packedPallet.specialPallet)
+                {
+                    specialPallets.Add(packedPallet);
+                    continue;
+                }
+
+                //TODO: write out the pallets
+                /*
+                 * 
+                 * write the output
+                 * end first foreach loop
+                 * 
+                 * then
+                 * 
+                 * foreach(PackedPallet special in specialPallets){
+                 * write output 
+                 * }
+                 * 
+                 */
+
+            }
+
+
+
+
+
+        }
+
+
     }
 }
 

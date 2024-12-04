@@ -16,6 +16,7 @@ namespace PalletOptimization.Models
         public string Name { get; set; }
         public RotationOptions RotationRules { get; set; }
         public bool IsSpecial { get; set; }
+        public string? tag { get; set; } = null;
         public int? MaxElementsPerPallet { get; set; } = null;
         public int Length { get; set; }
         public int Width { get; set; }
