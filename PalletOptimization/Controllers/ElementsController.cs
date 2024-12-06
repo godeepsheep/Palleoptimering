@@ -85,8 +85,13 @@ namespace PalletOptimization.Controllers
             Debug.WriteLine("Received Elements for Update:");
             foreach (var updatedElement in elements)
             {
+                Debug.WriteLine($"Updated Element InstanceId (Before Lookup): {updatedElement.Key}");
+
                 Debug.WriteLine($"InstanceId: {updatedElement.Key}, RotationRules: {updatedElement.Value.RotationRules}, IsSpecial: {updatedElement.Value.IsSpecial}, MaxElementsPerPallet: {updatedElement.Value.MaxElementsPerPallet}");
             }
+
+            
+
 
             // Get the current elements from the session
             var elementsJson = HttpContext.Session.GetString("Elements");
@@ -94,20 +99,43 @@ namespace PalletOptimization.Controllers
                 ? new List<Elements>()
                 : JsonSerializer.Deserialize<List<Elements>>(elementsJson);
 
+            // Make sure currentElements is never null by initializing it if necessary
+            currentElements = currentElements ?? new List<Elements>();
+
+            // Create a lookup dictionary for current elements by InstanceId for faster access
+            var elementsLookup = currentElements.ToDictionary(e => e.InstanceId);
+
+
+            Debug.WriteLine($"Elements count: {elements.Count}");
+            Debug.WriteLine($"Elements Lookup Count: {elementsLookup.Count}");
+
+            //To check the InstanceId attached to each element
+            foreach (var lookupElement in elementsLookup)
+            {
+                Debug.WriteLine($"InstanceId: {lookupElement.Key}");
+            }
+
             // Update the elements based on the received data
+            Debug.WriteLine($"Elements count: {elements.Count}");
             foreach (var updatedElement in elements.Values)
             {
-                var existingElement = currentElements.FirstOrDefault(e => e.InstanceId == updatedElement.InstanceId);
-                if (existingElement != null)
+
+                Debug.WriteLine($"Updated Element InstanceId: {updatedElement.InstanceId}");
+
+                if (elementsLookup.TryGetValue(updatedElement.InstanceId, out var existingElement))
                 {
-                    Debug.WriteLine($"InstanceId {updatedElement.InstanceId} not found in currentElements.");
-
                     Debug.WriteLine($"Before Update - InstanceId: {existingElement.InstanceId}, RotationRules: {existingElement.RotationRules}");
-                    existingElement.RotationRules = updatedElement.RotationRules;
-                    Debug.WriteLine($"After Update - InstanceId: {existingElement.InstanceId}, RotationRules: {existingElement.RotationRules}");
 
-                    existingElement.IsSpecial = updatedElement.IsSpecial;         // Update IsSpecial
-                    existingElement.MaxElementsPerPallet = updatedElement.MaxElementsPerPallet; // Update MaxElementsPerPallet
+                    // Update the element's properties
+                    existingElement.RotationRules = updatedElement.RotationRules;
+                    existingElement.IsSpecial = updatedElement.IsSpecial;
+                    existingElement.MaxElementsPerPallet = updatedElement.MaxElementsPerPallet;
+
+                    Debug.WriteLine($"After Update - InstanceId: {existingElement.InstanceId}, RotationRules: {existingElement.RotationRules}");
+                }
+                else
+                {
+                    Debug.WriteLine($"Element with InstanceId {updatedElement.InstanceId} not found.");
                 }
             }
 
