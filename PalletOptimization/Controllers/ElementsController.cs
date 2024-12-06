@@ -10,6 +10,7 @@ using System.Text.Json;
 using System.Xml.Linq;
 
 using System.Diagnostics;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 
 namespace PalletOptimization.Controllers
 {
@@ -90,7 +91,7 @@ namespace PalletOptimization.Controllers
                 Debug.WriteLine($"InstanceId: {updatedElement.Key}, RotationRules: {updatedElement.Value.RotationRules}, IsSpecial: {updatedElement.Value.IsSpecial}, MaxElementsPerPallet: {updatedElement.Value.MaxElementsPerPallet}");
             }
 
-            
+
 
 
             // Get the current elements from the session
@@ -249,6 +250,7 @@ namespace PalletOptimization.Controllers
             int currentWidth = 0;
             foreach (PalletSizeList elementList in PalletSizes)
             {
+                CurrentPallet.Group = elementList.group;
                 int maxWidth = elementList.group.Width;
                 //Inside this foreach, we loop over each list of pallet sizes, and the lists of elements that can fit on those pallets.
                 foreach (Elements element in elementList.ElementsFitOnPallet)
@@ -258,6 +260,7 @@ namespace PalletOptimization.Controllers
                     //this isn't perfect, but should be good enough.
                     if (currentWidth + element.Width < maxWidth)
                     {
+                        RotateElementsOnPallets(element, CurrentPallet);
                         CurrentPallet.elementsOnPallet.Add(element);
                         currentWidth += element.Width;
                     }
@@ -270,10 +273,11 @@ namespace PalletOptimization.Controllers
                         //try again
                         if (currentWidth + element.Width < maxWidth)
                         {
+                            RotateElementsOnPallets(element, CurrentPallet);
                             CurrentPallet.elementsOnPallet.Add(element);
                             currentWidth += element.Width;
                         }
-                       
+
                     }
                 }
                 //this is to start fresh with the new batch. We could make it better by sorting the list first, so we start with the smallest items.
@@ -286,13 +290,33 @@ namespace PalletOptimization.Controllers
                     currentWidth = 0;
                 }
             }
-            RotateElementsOnPallets(PackedPallets);
+
         }
 
-        public void RotateElementsOnPallets(List<PackedPallet> PackedPallets)
+        public void RotateElementsOnPallets(Elements element, PackedPallet currentPallet)
         {
-            //TODO: rotate elements if their HWF is below the threshold the user sets on the site.
-            //or, rotate it so the longest side is laying down
+            if (element.RotationRules == RotationOptions.NeedToRotate && element.Height != currentPallet.Group.Length + Pallets.MaxOverhang)
+            {
+                //switching values approach
+                int temp = element.Height;
+                element.Height = element.Length;
+                element.Length = temp;
+
+                /*
+                 * bool approach
+                 * element.upright = false;
+                 * 
+                 * string approach
+                 * element.orientation = "Sideways";
+                 */
+
+            }
+            if (element.RotationRules == RotationOptions.CanRotate &&
+                element.Height < currentPallet.Group.Length + Pallets.MaxOverhang &&
+                (float)element.Height / (float)element.Length > 1) //HWF
+            {
+                //rotate element
+            }
         }
 
 
