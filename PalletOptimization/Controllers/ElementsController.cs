@@ -30,12 +30,12 @@ namespace PalletOptimization.Controllers
             var elements = string.IsNullOrEmpty(elementsJson)
                 ? new List<Elements>()
                 : JsonSerializer.Deserialize<List<Elements>>(elementsJson);
-            
+
             Debug.WriteLine("Elements in Planner:");
-                foreach (var element in elements)
-                {
-                        Debug.WriteLine($"InstanceId: {element.InstanceId}, RotationRules: {element.RotationRules}");
-                }
+            foreach (var element in elements)
+            {
+                Debug.WriteLine($"InstanceId: {element.InstanceId}, RotationRules: {element.RotationRules}");
+            }
 
             ViewBag.RotationOptions = Enum.GetValues(typeof(RotationOptions)).Cast<RotationOptions>().ToList();
             return View(elements);
@@ -87,13 +87,13 @@ namespace PalletOptimization.Controllers
             {
                 Debug.WriteLine($"InstanceId: {updatedElement.Key}, RotationRules: {updatedElement.Value.RotationRules}, IsSpecial: {updatedElement.Value.IsSpecial}, MaxElementsPerPallet: {updatedElement.Value.MaxElementsPerPallet}");
             }
-        
+
             // Get the current elements from the session
             var elementsJson = HttpContext.Session.GetString("Elements");
             var currentElements = string.IsNullOrEmpty(elementsJson)
                 ? new List<Elements>()
                 : JsonSerializer.Deserialize<List<Elements>>(elementsJson);
-        
+
             // Update the elements based on the received data
             foreach (var updatedElement in elements.Values)
             {
@@ -110,18 +110,18 @@ namespace PalletOptimization.Controllers
                     existingElement.MaxElementsPerPallet = updatedElement.MaxElementsPerPallet; // Update MaxElementsPerPallet
                 }
             }
-        
+
             // Save the updated elements back to the session
             Debug.WriteLine($"Session data before saving: {JsonSerializer.Serialize(currentElements)}");
 
             HttpContext.Session.SetString("Elements", JsonSerializer.Serialize(currentElements));
-        
+
             Debug.WriteLine("Updated Elements List:");
             foreach (var element in currentElements)
             {
                 Debug.WriteLine($"InstanceId: {element.InstanceId}, RotationRules: {element.RotationRules}, IsSpecial: {element.IsSpecial}, MaxElementsPerPallet: {element.MaxElementsPerPallet}");
             }
-        
+
             return Json(new { success = true, message = "Elements updated successfully!" });
         }
 
@@ -211,18 +211,60 @@ namespace PalletOptimization.Controllers
             }
             //from here, the inputs are sorted into lists of the pallets they fit on.
 
-            //next step is sorting them into pallets, hard part is the maxElementsPerPallet (MEPP) rule should be respected, but also the total width of the pallet.
-            //also, how does an element with 5 MEPP work with a 2 MEPP element? Need to talk about how we handle this coming part.
-            //should we sort the duplicate elements first, and look at the MEPP, or do we mix elements with different MEPP. And in that case, how would that work?
-            //if we have 2 MEPP and 5 MEPP, do we have one of the 2 MEPP, and just one of the 5 MEPP. so in other words, respect the lowest number?
-            
-            NextStep(PalletSizes);
+            PlaceEOnPallets(PalletSizes);
         }
 
-        public void NextStep(List<PalletSizeList> PalletSizes)
+        public void PlaceEOnPallets(List<PalletSizeList> PalletSizes)
         {
-            //TODO: look at how many elements can be on one pallet. Rotation will come after they have their pallets, as the width wont change with rotation.
-           
+            List<PackedPallet> PackedPallets = new();
+            PackedPallet CurrentPallet = new();
+            int currentWidth = 0;
+            foreach (PalletSizeList elementList in PalletSizes)
+            {
+                int maxWidth = elementList.group.Width;
+                //Inside this foreach, we loop over each list of pallet sizes, and the lists of elements that can fit on those pallets.
+                foreach (Elements element in elementList.ElementsFitOnPallet)
+                {
+                    //inside this foreach, we loop over the list inside the palletgroup. 
+                    //just checks if the incoming element can fit on current pallet, if it can it get's added. if it can't, it will finish that pallet.
+                    //this isn't perfect, but should be good enough.
+                    if (currentWidth + element.Width < maxWidth)
+                    {
+                        CurrentPallet.elementsOnPallet.Add(element);
+                        currentWidth += element.Width;
+                    }
+                    //no more room on pallet. 
+                    else
+                    {
+                        PackedPallets.Add(CurrentPallet);
+                        CurrentPallet = new();
+                        currentWidth = 0;
+                        //try again
+                        if (currentWidth + element.Width < maxWidth)
+                        {
+                            CurrentPallet.elementsOnPallet.Add(element);
+                            currentWidth += element.Width;
+                        }
+                       
+                    }
+                }
+                //this is to start fresh with the new batch. We could make it better by sorting the list first, so we start with the smallest items.
+                //That way we can keep a "rest" element and check on each pallet. But since this is un-sorted, we'll just have a pallet with few items
+                //on it if there's any remaning.
+                if (CurrentPallet.elementsOnPallet.Count > 0)
+                {
+                    PackedPallets.Add(CurrentPallet);
+                    CurrentPallet = new();
+                    currentWidth = 0;
+                }
+            }
+            RotateElementsOnPallets(PackedPallets);
+        }
+
+        public void RotateElementsOnPallets(List<PackedPallet> PackedPallets)
+        {
+            //TODO: rotate elements if their HWF is below the threshold the user sets on the site.
+            //or, rotate it so the longest side is laying down
         }
 
 

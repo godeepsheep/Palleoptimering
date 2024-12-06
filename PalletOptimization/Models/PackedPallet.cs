@@ -1,4 +1,6 @@
-﻿namespace PalletOptimization.Models
+﻿using PalletOptimization.Enums;
+
+namespace PalletOptimization.Models
 {
     public class PackedPallet
     {
@@ -7,5 +9,8 @@
         public int TotalWeight { get; set; }
         public int TotalHeight { get; set; }
         public bool specialPallet { get; set; }
+        public PalletGroupEnum PalletGroup { get; set; }
+        public PalletTypeEnum PalletType { get; set; }
+
     }
 }
