@@ -37,7 +37,7 @@ ViewData["Title"] = "Planner";
                     <th>@Html.DisplayNameFor(model => model.Name)</th>
                     <th>@Html.DisplayNameFor(model => model.RotationRules)</th>
                     <th>@Html.DisplayNameFor(model => model.IsSpecial)</th>
-                    <th>@Html.DisplayNameFor(model => model.MaxElementsPerPallet)</th>
+                    <th>@Html.DisplayNameFor(model => model.Tag)</th>
                     <th>@Html.DisplayNameFor(model => model.Length) (mm)</th>
                     <th>@Html.DisplayNameFor(model => model.Width) (mm)</th>
                     <th>@Html.DisplayNameFor(model => model.Height) (mm)</th>
@@ -63,9 +63,9 @@ ViewData["Title"] = "Planner";
                         <input type="hidden" name="elements[@item.InstanceId].IsSpecial" value="false" />
                     </td>
 
-                    <!-- MaxElementsPerPallet Field -->
+                    <!-- Elements Tag Field -->
                     <td>
-                        <input type="number" class="form-control" name="elements[@item.InstanceId].MaxElementsPerPallet" value="@item.MaxElementsPerPallet" />
+                        <input type="text" class="form-control" name="elements[@item.InstanceId].Tag" value="@item.Tag" style="width: 80px;" />
                     </td>
 
                     <td>@Html.DisplayFor(modelItem => item.Length)</td>
@@ -160,7 +160,7 @@ ViewData["Title"] = "Planner";
     </div>
 </div>
 
-<!-- Toast notification styles -->
+<!-- Toast notification styles (the pop up)--> 
 <style>
     .toast {
         visibility: hidden;

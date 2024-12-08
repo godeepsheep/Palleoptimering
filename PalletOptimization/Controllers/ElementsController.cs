@@ -60,7 +60,7 @@ namespace PalletOptimization.Controllers
                         Name = element.Name,
                         RotationRules = element.RotationRules,
                         IsSpecial = element.IsSpecial,
-                        MaxElementsPerPallet = element.MaxElementsPerPallet,
+                        Tag = element.Tag,
                         Length = element.Length,
                         Width = element.Width,
                         Height = element.Height,
@@ -183,16 +183,16 @@ namespace PalletOptimization.Controllers
             {
                 //get a list of all tags to be used later.
                 //TODO: use it later.
-                if (element.tag != null)
+                if (element.Tag != null)
                 {
                     if (element.IsSpecial)
                     {
-                        taggedItemsList.Add(new TaggedItem { tag = element.tag, taggedElement = element, special = true });
+                        taggedItemsList.Add(new TaggedItem { tag = element.Tag, taggedElement = element, special = true });
                         inputList.Remove(element);
                     }
                     else
                     {
-                        taggedItemsList.Add(new TaggedItem { tag = element.tag, taggedElement = element });
+                        taggedItemsList.Add(new TaggedItem { tag = element.Tag, taggedElement = element });
                         inputList.Remove(element);
                     }
                     continue;

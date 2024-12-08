@@ -5,13 +5,13 @@
             const instanceId = $(this).find("select").attr("name").match(/elements\[(.*?)\]/)[1];
             const rotationRules = $(this).find("select").val();
             const isSpecial = $(this).find("input[type=checkbox]").is(":checked");
-            const maxElementsPerPallet = $(this).find("input[type=number]").val();
+            const tag = $(this).find("input[type=text]").val();
 
             data[instanceId] = {
                 InstanceId: instanceId,
                 RotationRules: parseInt(rotationRules),
                 IsSpecial: isSpecial,
-                MaxElementsPerPallet: maxElementsPerPallet ? parseInt(maxElementsPerPallet) : null
+                Tag: tag ? tag : null
             };
         });
 

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PalletOptimization")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+50f370affc309dca99b8612da7b66c679e348d30")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3361a802157e09178ae120cd9e65ea532fcf305b")]
 [assembly: System.Reflection.AssemblyProductAttribute("PalletOptimization")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PalletOptimization")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
