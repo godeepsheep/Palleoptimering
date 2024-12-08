@@ -170,10 +170,8 @@ namespace PalletOptimization.Controllers
             Pallets.MaxHeight = int.Parse(Request.Form["MaxPalletSpace"]);
         }
 
-
-
-
-
+        
+        
 
         //______________________________________________________________________________________
         //The Algorithm

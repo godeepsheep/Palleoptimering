@@ -1,7 +1,10 @@
+using System.Diagnostics;
 using DotNetEnv;
+using Microsoft.AspNetCore.Identity;
 using PalletOptimization.Data;
 using Microsoft.EntityFrameworkCore;
 using PalletOptimization.Controllers;
+using PalletOptimization.Utilities;
 
 // Load environment variables from the .env file
 Env.Load();
@@ -20,6 +23,23 @@ builder.Services.AddSession(); // Enable session handling
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(Environment.GetEnvironmentVariable("Server_Password")));
 
+//Added Identity services for the login
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(Environment.GetEnvironmentVariable("Server_Password")));
+
+builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
+    {
+        options.Password.RequireDigit = false;
+        options.Password.RequireNonAlphanumeric = false;
+        options.Password.RequireUppercase = false;
+        options.Password.RequireLowercase = false;
+        options.Password.RequiredLength = 5; 
+    })
+    .AddEntityFrameworkStores<AppDbContext>()
+    .AddDefaultTokenProviders();
+
+
+
 // Register PalletController (PalletController depends on AppDbContext, so DI will inject AppDbContext instance into the PalletController constructor when u use it.)
 //Scoped means that one instance is created per HTTP request.
 builder.Services.AddScoped<PalletGroupController>(); //Here we are adding a palletscontroller to our application. 
@@ -30,6 +50,21 @@ builder.Services.AddScoped<PalletGroupController>(); //Here we are adding a pall
 
 //Builds the application
 var app = builder.Build();
+
+// Seed the admin user and roles
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+
+    try
+    {
+        await IdentitySeeder.SeedAdminAsync(services);
+    }
+    catch (Exception ex)
+    {
+        Debug.WriteLine($"Error while seeding user: {ex.Message}");
+    }
+}
 
 // Create a DI scope for testing CRUD operations
 // This scope is independent of the HTTP pipeline
@@ -49,11 +84,12 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
+app.UseAuthentication();
 app.UseAuthorization();
 app.UseSession(); // Middleware to handle sessions
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Account}/{action=Login}/{id?}");
 
 app.Run();

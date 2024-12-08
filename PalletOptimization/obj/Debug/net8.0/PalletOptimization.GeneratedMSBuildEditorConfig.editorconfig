@@ -26,6 +26,10 @@ build_property.GenerateRazorMetadataSourceChecksumAttributes =
 build_property.MSBuildProjectDirectory = C:\Users\GoDee\Desktop\ExamensProject\Palleoptimering\PalletOptimization
 build_property._RazorSourceGeneratorDebug = 
 
+[C:/Users/GoDee/Desktop/ExamensProject/Palleoptimering/PalletOptimization/Views/Account/Login.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxMb2dpbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/GoDee/Desktop/ExamensProject/Palleoptimering/PalletOptimization/Views/Elements/Planner.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRWxlbWVudHNcUGxhbm5lci5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
