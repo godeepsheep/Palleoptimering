@@ -4,6 +4,7 @@
     {
         public PalletGroup group { get; set; }
         public List<Elements> ElementsFitOnPallet { get; set; } = new List<Elements>();
+        public PalletType type { get; set; }
 
     }
 }
