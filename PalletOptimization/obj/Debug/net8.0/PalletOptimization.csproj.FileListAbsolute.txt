@@ -579,3 +579,4 @@ C:\Users\GoDee\Desktop\ExamensProject\Palleoptimering\PalletOptimization\obj\Deb
 C:\Users\GoDee\Desktop\ExamensProject\Palleoptimering\PalletOptimization\obj\Debug\net8.0\PalletOptimization.pdb
 C:\Users\GoDee\Desktop\ExamensProject\Palleoptimering\PalletOptimization\obj\Debug\net8.0\PalletOptimization.genruntimeconfig.cache
 C:\Users\GoDee\Desktop\ExamensProject\Palleoptimering\PalletOptimization\obj\Debug\net8.0\ref\PalletOptimization.dll
+C:\Users\Mark\Documents\GitHub\Palleoptimering\PalletOptimization\bin\Debug\net8.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll

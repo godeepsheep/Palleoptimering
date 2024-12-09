@@ -104,8 +104,7 @@
               "ViewState": "AgIAABUAAAAAAAAAAAAAAB4AAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2024-12-02T13:11:45.633Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
@@ -118,8 +117,7 @@
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABcAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-11-25T10:03:44.32Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
@@ -132,8 +130,7 @@
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAgAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-03T10:24:36.934Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
@@ -145,8 +142,7 @@
               "RelativeToolTip": "Models\\PalletSizeList.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-06T10:25:26.595Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-06T10:25:26.595Z"
             },
             {
               "$type": "Document",
@@ -158,8 +154,7 @@
               "RelativeToolTip": "Models\\Pallets.cs",
               "ViewState": "AgIAAAoAAAAAAAAAAAAQwB4AAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-03T10:23:33.002Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-03T10:23:33.002Z"
             },
             {
               "$type": "Document",
@@ -171,8 +166,7 @@
               "RelativeToolTip": "Models\\PalletGroup.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAaAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-29T14:00:52.276Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-29T14:00:52.276Z"
             },
             {
               "$type": "Document",
@@ -184,8 +178,7 @@
               "RelativeToolTip": "Views\\PalletGroups\\Create.cshtml",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAsAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-11-29T12:19:14.196Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-29T12:19:14.196Z"
             },
             {
               "$type": "Document",
@@ -197,8 +190,7 @@
               "RelativeToolTip": "Views\\Shared\\_Layout.cshtml",
               "ViewState": "AgIAAAMAAAAAAAAAAAAAAB8AAAAVAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-11-29T11:54:10.984Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-29T11:54:10.984Z"
             },
             {
               "$type": "Document",
@@ -210,8 +202,7 @@
               "RelativeToolTip": "Controllers\\PalletGroupController.cs",
               "ViewState": "AgIAAEQAAAAAAAAAAAAAAFUAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-25T09:16:10.896Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-25T09:16:10.896Z"
             },
             {
               "$type": "Document",
@@ -223,8 +214,7 @@
               "RelativeToolTip": "Controllers\\PalletGroupsController.cs",
               "ViewState": "AgIAADEAAAAAAAAAAAAkwEAAAAAhAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-25T09:23:42.567Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-25T09:23:42.567Z"
             },
             {
               "$type": "Document",
@@ -236,8 +226,7 @@
               "RelativeToolTip": "Enums\\PalletGroupEnum.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAPAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-18T11:53:02.968Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-18T11:53:02.968Z"
             },
             {
               "$type": "Document",
@@ -273,8 +262,7 @@
               "RelativeToolTip": "Program.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAxAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-18T09:29:38.964Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-18T09:29:38.964Z"
             },
             {
               "$type": "Document",
@@ -286,15 +274,14 @@
               "RelativeToolTip": "Data\\AppDbContext.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAACsAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-20T16:42:47.934Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-20T16:42:47.934Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 14,
-              "Title": "dbo.PalletGroups [Data]",
+              "Title": "dbo.PalletGroups.sql",
               "DocumentMoniker": "ViewDataWindow_MSSQL__/mssql12.unoeuro.com/straysheep_dk_db_palleoptimering/straysheep_dk/SqlTable/dbo.PalletGroups.sql",
-              "ToolTip": "dbo.PalletGroups [Data]",
+              "ToolTip": "ViewDataWindow_MSSQL__/mssql12.unoeuro.com/straysheep_dk_db_palleoptimering/straysheep_dk/SqlTable/dbo.PalletGroups.sql",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
               "WhenOpened": "2024-11-28T13:12:18.729Z"
             }
