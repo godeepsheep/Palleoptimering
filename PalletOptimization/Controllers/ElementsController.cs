@@ -258,8 +258,9 @@ namespace PalletOptimization.Controllers
                     //this isn't perfect, but should be good enough.
                     if (currentWidth + element.Width < maxWidth)
                     {
-                        RotateElementsOnPallets(element, CurrentPallet);
-                        CurrentPallet.elementsOnPallet.Add(element);
+                        var currentElement = element;
+                        currentElement = RotateElementsOnPallets(currentElement, CurrentPallet);
+                        CurrentPallet.elementsOnPallet.Add(currentElement);
                         currentWidth += element.Width;
                     }
                     //no more room on pallet. 
@@ -271,8 +272,9 @@ namespace PalletOptimization.Controllers
                         //try again
                         if (currentWidth + element.Width < maxWidth)
                         {
-                            RotateElementsOnPallets(element, CurrentPallet);
-                            CurrentPallet.elementsOnPallet.Add(element);
+                            var currentElement = element;
+                            currentElement = RotateElementsOnPallets(currentElement, CurrentPallet);
+                            CurrentPallet.elementsOnPallet.Add(currentElement);
                             currentWidth += element.Width;
                         }
 
@@ -291,9 +293,9 @@ namespace PalletOptimization.Controllers
 
         }
 
-        public void RotateElementsOnPallets(Elements element, PackedPallet currentPallet)
+        public Elements RotateElementsOnPallets(Elements element, PackedPallet currentPallet)
         {
-            if (element.RotationRules == RotationOptions.NeedToRotate && element.Height != currentPallet.Group.Length + Pallets.MaxOverhang)
+            if (element.RotationRules == RotationOptions.NeedToRotate && element.Height < currentPallet.Group.Length + Pallets.MaxOverhang)
             {
                 //switching values approach
                 int temp = element.Height;
@@ -307,14 +309,17 @@ namespace PalletOptimization.Controllers
                  * string approach
                  * element.orientation = "Sideways";
                  */
+                
 
             }
             if (element.RotationRules == RotationOptions.CanRotate &&
                 element.Height < currentPallet.Group.Length + Pallets.MaxOverhang &&
                 (float)element.Height / (float)element.Length > 1) //HWF
             {
+                
                 //rotate element
             }
+            return element;
         }
 
 
