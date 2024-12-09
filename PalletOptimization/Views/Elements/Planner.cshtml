@@ -114,50 +114,51 @@ ViewData["Title"] = "Planner";
     <!-- Right Side: Pallet Customization Form -->
     <div style="width: 40%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
         <h3 id="CustomizePallet">Pallet Customization</h3>
-        <form>
+        <form asp-action="SavePalletSettings" method="post">
             <div class="mb-3">
                 <label for="MaxHeight" class="form-label">Max Height for Pallet + Element (mm)</label>
-                <input type="number" class="form-control" id="MaxHeight" placeholder="Enter max height">
+                <input name="MaxHeight" type="number" class="form-control" id="MaxHeight" value="@(Pallets.MaxHeight)">
             </div>
 
             <div class="mb-3">
                 <label for="MaxWeight" class="form-label">Max Weight (kg)</label>
-                <input type="number" class="form-control" id="MaxWeight" placeholder="Enter max weight">
+                <input name="MaxWeight" type="number" class="form-control" id="MaxWeight" value="@(Pallets.MaxWeight)">
             </div>
 
             <div class="mb-3">
                 <label for="Overhang" class="form-label">Overhang (mm)</label>
-                <input type="number" class="form-control" id="Overhang" placeholder="Enter overhang">
+                <input name="Overhang" type="number" class="form-control" id="Overhang" value=@(Pallets.MaxOverhang)>
             </div>
 
             <div class="mb-3">
                 <label for="SpaceBetween" class="form-label">Space Between Elements (mm)</label>
-                <input type="number" class="form-control" id="SpaceBetween" placeholder="Enter space between elements">
+                <input name="SpaceBetween" type="number" class="form-control" id="SpaceBetween" value="@(Pallets.SpaceBetweenElements)">
             </div>
 
             <div class="mb-3">
                 <label for="StackingHeight" class="form-label">Allow Stacking Up to (mm)</label>
-                <input type="number" class="form-control" id="StackingHeight" placeholder="Enter stacking height">
+                <input name="StackingHeight" type="number" class="form-control" id="StackingHeight" value="@(Pallets.StackingMaxHeight)">
             </div>
 
             <div class="mb-3">
                 <label for="StackingWeight" class="form-label">Allow Stacking Up to (kg)</label>
-                <input type="number" class="form-control" id="StackingWeight" placeholder="Enter stacking weight">
+                <input name="StackingWeight" type="number" class="form-control" id="StackingWeight" value="@(Pallets.StackingMaxWeight)">
             </div>
 
             <div class="mb-3">
                 <label for="AddedPlate" class="form-label">Added Plate on Side (mm)</label>
-                <input type="number" class="form-control" id="AddedPlate" placeholder="Enter added plate thickness">
+                <input name="AddedPlate" type="number" class="form-control" id="AddedPlate" value="@(Pallets.Endplate)">
             </div>
 
             <div class="mb-3">
-                <label for="MaxPalletSpace" class="form-label">Max Amount of Space on Pallet (mm²)</label>
-                <input type="number" class="form-control" id="MaxPalletSpace" placeholder="Enter max space">
+                <label for="MaxPalletSpace" class="form-label">Max Amount of slots on Pallet (slots)</label>
+                <input name="MaxPalletSpace" type="number" class="form-control" id="MaxPalletSpace" value="@(Pallets.SlotsOnPallet)">
             </div>
 
-            <button type="button" class="btn btn-primary">Save Pallet Settings</button>
+            <button type="submit" class="btn btn-primary">Save Pallet Settings</button>
         </form>
     </div>
+
 </div>
 
 <!-- Toast notification styles (the pop up)--> 
