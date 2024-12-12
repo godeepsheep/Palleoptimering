@@ -25,6 +25,10 @@ namespace PalletOptimization.Controllers
             _context = context;
         }
 
+        //______________________________________________________________________________________
+        // UI Stuff
+        //______________________________________________________________________________________
+
         public IActionResult Planner()
         {
             var elementsJson = HttpContext.Session.GetString("Elements");
@@ -83,282 +87,255 @@ namespace PalletOptimization.Controllers
         [HttpPost]
         public IActionResult SaveAllElements(Dictionary<Guid, ElementsDto> elements)
         {
-            Debug.WriteLine("Received Elements for Update:");
-            foreach (var updatedElement in elements)
+            try
             {
-                Debug.WriteLine($"Updated Element InstanceId (Before Lookup): {updatedElement.Key}");
-
-                Debug.WriteLine($"InstanceId: {updatedElement.Key}, RotationRules: {updatedElement.Value.RotationRules}, IsSpecial: {updatedElement.Value.IsSpecial}, MaxElementsPerPallet: {updatedElement.Value.MaxElementsPerPallet}");
-            }
-
-
-
-
-            // Get the current elements from the session
-            var elementsJson = HttpContext.Session.GetString("Elements");
-            var currentElements = string.IsNullOrEmpty(elementsJson)
-                ? new List<Elements>()
-                : JsonSerializer.Deserialize<List<Elements>>(elementsJson);
-
-            // Make sure currentElements is never null by initializing it if necessary
-            currentElements = currentElements ?? new List<Elements>();
-
-            // Create a lookup dictionary for current elements by InstanceId for faster access
-            var elementsLookup = currentElements.ToDictionary(e => e.InstanceId);
-
-
-            Debug.WriteLine($"Elements count: {elements.Count}");
-            Debug.WriteLine($"Elements Lookup Count: {elementsLookup.Count}");
-
-            //To check the InstanceId attached to each element
-            foreach (var lookupElement in elementsLookup)
-            {
-                Debug.WriteLine($"InstanceId: {lookupElement.Key}");
-            }
-
-            // Update the elements based on the received data
-            Debug.WriteLine($"Elements count: {elements.Count}");
-            foreach (var updatedElement in elements.Values)
-            {
-
-                Debug.WriteLine($"Updated Element InstanceId: {updatedElement.InstanceId}");
-
-                if (elementsLookup.TryGetValue(updatedElement.InstanceId, out var existingElement))
+                // Retrieve current elements from session
+                var elementsJson = HttpContext.Session.GetString("Elements");
+                var currentElements = string.IsNullOrEmpty(elementsJson)
+                    ? new List<Elements>()
+                    : JsonSerializer.Deserialize<List<Elements>>(elementsJson);
+                
+                if (currentElements == null)
                 {
-                    Debug.WriteLine($"Before Update - InstanceId: {existingElement.InstanceId}, RotationRules: {existingElement.RotationRules}");
-
-                    // Update the element's properties
-                    existingElement.RotationRules = updatedElement.RotationRules;
-                    existingElement.IsSpecial = updatedElement.IsSpecial;
-                    existingElement.MaxElementsPerPallet = updatedElement.MaxElementsPerPallet;
-
-                    Debug.WriteLine($"After Update - InstanceId: {existingElement.InstanceId}, RotationRules: {existingElement.RotationRules}");
+                    Debug.WriteLine("No elements found in session.");
+                    return Json(new { success = false, message = "No elements found in session." });
                 }
-                else
+                Debug.WriteLine($"Current Elements in Session (Before Update): {JsonSerializer.Serialize(currentElements)}");
+
+                // Update elements in session
+                foreach (var updatedElement in elements.Values)
                 {
-                    Debug.WriteLine($"Element with InstanceId {updatedElement.InstanceId} not found.");
+                    var existingElement = currentElements.FirstOrDefault(e => e.InstanceId == updatedElement.InstanceId);
+                    if (existingElement != null)
+                    {
+                        Debug.WriteLine($"Updating Element: {existingElement.InstanceId}");
+                        existingElement.RotationRules = updatedElement.RotationRules;
+                        existingElement.IsSpecial = updatedElement.IsSpecial;
+                        existingElement.Tag = updatedElement.Tag;
+                        Debug.WriteLine($"Updated Element: {JsonSerializer.Serialize(existingElement)}");
+                    }
+                    else
+                    {
+                        var newElement = new Elements
+                        {
+                            InstanceId = updatedElement.InstanceId,
+                            RotationRules = updatedElement.RotationRules,
+                            IsSpecial = updatedElement.IsSpecial,
+                            Tag = updatedElement.Tag
+                        };
+                        currentElements.Add(newElement);
+                        Debug.WriteLine($"Added New Element: {JsonSerializer.Serialize(newElement)}");
+                    }
                 }
+
+                // Save updated elements back to session
+                HttpContext.Session.SetString("Elements", JsonSerializer.Serialize(currentElements));
+
+                Debug.WriteLine($"Updated Elements in Session (After Update): {JsonSerializer.Serialize(currentElements)}");
+
+                return Json(new { success = true, message = "Elements updated successfully!" });
             }
-
-            // Save the updated elements back to the session
-            Debug.WriteLine($"Session data before saving: {JsonSerializer.Serialize(currentElements)}");
-
-            HttpContext.Session.SetString("Elements", JsonSerializer.Serialize(currentElements));
-
-            Debug.WriteLine("Updated Elements List:");
-            foreach (var element in currentElements)
+            catch (Exception ex)
             {
-                Debug.WriteLine($"InstanceId: {element.InstanceId}, RotationRules: {element.RotationRules}, IsSpecial: {element.IsSpecial}, MaxElementsPerPallet: {element.MaxElementsPerPallet}");
+                Debug.WriteLine($"Error in SaveAllElements: {ex.Message}");
+                return Json(new { success = false, message = "Error updating elements." });
             }
-
-            return Json(new { success = true, message = "Elements updated successfully!" });
         }
-
 
 
         [HttpPost]
-        public void SavePalletSettings() //IT FUCKING WORKS BOI
+        public IActionResult SavePalletSettings()
         {
+            try
+            {
+                Pallets.MaxHeight = int.Parse(Request.Form["MaxHeight"]);
+                Pallets.MaxWeight = int.Parse(Request.Form["MaxWeight"]);
+                Pallets.MaxOverhang = int.Parse(Request.Form["Overhang"]);
+                Pallets.SpaceBetweenElements = int.Parse(Request.Form["SpaceBetween"]);
+                Pallets.StackingMaxHeight = int.Parse(Request.Form["StackingHeight"]);
+                Pallets.StackingMaxWeight = int.Parse(Request.Form["StackingWeight"]);
+                Pallets.Endplate = int.Parse(Request.Form["AddedPlate"]);
+                Pallets.SlotsOnPallet = int.Parse(Request.Form["MaxPalletSpace"]);
 
-            Pallets.MaxHeight = int.Parse(Request.Form["MaxHeight"]);
-            Pallets.MaxWeight = int.Parse(Request.Form["MaxWeight"]);
-            Pallets.MaxOverhang = int.Parse(Request.Form["Overhang"]);
-            Pallets.SpaceBetweenElements = int.Parse(Request.Form["SpaceBetween"]);
-            Pallets.StackingMaxHeight = int.Parse(Request.Form["StackingHeight"]);
-            Pallets.StackingMaxWeight = int.Parse(Request.Form["StackingWeight"]);
-            Pallets.Endplate = int.Parse(Request.Form["AddedPlate"]);
-            Pallets.MaxHeight = int.Parse(Request.Form["MaxPalletSpace"]);
+                // Retrieve existing session data
+                var sessionData = HttpContext.Session.GetString("Elements");
+                if (!string.IsNullOrEmpty(sessionData))
+                {
+                    Debug.WriteLine("Existing session data for elements found.");
+                }
+                else
+                {
+                    Debug.WriteLine("No existing session data for elements.");
+                }
+
+                Debug.WriteLine("Pallet settings saved successfully.");
+                return Json(new { success = true, message = "Pallet settings saved successfully!" });
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error in SavePalletSettings: {ex.Message}");
+                return Json(new { success = false, message = "Error saving pallet settings." });
+            }
         }
 
-        
-        
+
 
         //______________________________________________________________________________________
         //The Algorithm
         //______________________________________________________________________________________
-        public void PreSortElements(List<Elements> inputList)
+
+        public void OptimizePacking(List<Elements> elements)
         {
-            foreach (Elements element in inputList)
+            // Group elements by tag
+            var taggedGroups = elements
+                .Where(e => !string.IsNullOrEmpty(e.Tag))
+                .GroupBy(e => e.Tag)
+                .ToDictionary(g => g.Key, g => g.ToList());
+
+            var untaggedItems = elements.Where(e => string.IsNullOrEmpty(e.Tag)).ToList();
+
+            // Process each tagged group
+            foreach (var (tag, groupElements) in taggedGroups)
             {
-                //get a list of all tags to be used later.
-                //TODO: use it later.
-                if (element.Tag != null)
-                {
-                    if (element.IsSpecial)
-                    {
-                        taggedItemsList.Add(new TaggedItem { tag = element.Tag, taggedElement = element, special = true });
-                        inputList.Remove(element);
-                    }
-                    else
-                    {
-                        taggedItemsList.Add(new TaggedItem { tag = element.Tag, taggedElement = element });
-                        inputList.Remove(element);
-                    }
-                    continue;
-                }
-                //if an element is special, remove it from the list of pallets to be sorted, as it will get its own.
-                if (element.IsSpecial)
-                {
-                    packedPallets.Add(new PackedPallet { elementsOnPallet = new List<Elements> { element }, specialPallet = true });
-                    inputList.Remove(element);
-                    continue;
-                }
+                packedPallets.AddRange(PackElements(groupElements, tag));
             }
-            SortIntoSizes(inputList);
+
+            // Process untagged items
+            packedPallets.AddRange(PackElements(untaggedItems, null));
         }
 
-        public void SortIntoSizes(List<Elements> PreSortedList)
+        private List<PackedPallet> PackElements(List<Elements> elements, string? tag)
         {
-            //make the list containing lists. there's a list on the class "PalletSizeList".
-            List<PalletSizeList> PalletSizes = new();
-            _context.PalletGroups.ToList().ForEach(p => PalletSizes.Add(new PalletSizeList { group = p }));
+            var pallets = new List<PackedPallet>();
+            PackedPallet currentPallet = InitializeNewPallet(tag);
 
-            //sort the inputlist into the different smallest pallet it can be on.
-            foreach (Elements element in PreSortedList)
+            foreach (var element in elements.OrderByDescending(e => e.Height))
             {
-                //start with high number, so the first call will set it to the first pallets length.
-                //The default value is 0, and nothing is smaller than that, so we need to set it high first.
-                int SmallestLength = 100000;
-                int index = -1;
-
-                for (int j = 0; j < PalletSizes.Count; j++)
+                if (!CanFitOnPallet(currentPallet, element))
                 {
-                    //max overhang added on the pallet length, to get the longest the element can stick out over the pallet.
-                    if (element.Length < PalletSizes[j].group.Length + Pallets.MaxOverhang && SmallestLength > PalletSizes[j].group.Length)
+                    // Finalize current pallet
+                    ApplyLayering(currentPallet);
+                    pallets.Add(currentPallet);
+
+                    // Start a new pallet
+                    currentPallet = InitializeNewPallet(tag);
+                }
+
+                PlaceElementOnPallet(currentPallet, element);
+            }
+
+            // Finalize the last pallet
+            if (currentPallet.elementsOnPallet.Any())
+            {
+                ApplyLayering(currentPallet);
+                pallets.Add(currentPallet);
+            }
+
+            return pallets;
+        }
+
+        private PackedPallet InitializeNewPallet(string? tag)
+        {
+            return new PackedPallet
+            {
+                elementsOnPallet = new List<Elements>(),
+                TotalWeight = 0,
+                TotalHeight = 0,
+                Group = new PalletGroup { Name = tag ?? "Default" },
+                specialPallet = !string.IsNullOrEmpty(tag)
+            };
+        }
+
+        private bool CanFitOnPallet(PackedPallet pallet, Elements element)
+        {
+            return pallet.TotalWeight + element.Weight <= Pallets.MaxWeight &&
+                   pallet.TotalHeight + element.Height <= Pallets.MaxHeight;
+        }
+
+        private void PlaceElementOnPallet(PackedPallet pallet, Elements element)
+        {
+            pallet.elementsOnPallet.Add(element);
+            pallet.TotalWeight += element.Weight;
+            pallet.TotalHeight += element.Height;
+        }
+
+        private void ApplyLayering(PackedPallet pallet)
+        {
+            int currentLayerHeight = 0;
+            int currentLayerWeight = 0;
+            int currentLayer = 1;
+
+            foreach (var element in pallet.elementsOnPallet.OrderByDescending(e => e.Height))
+            {
+                if (currentLayerHeight + element.Height > Pallets.StackingMaxHeight ||
+                    currentLayerWeight + element.Weight > Pallets.StackingMaxWeight)
+                {
+                    currentLayer++;
+                    currentLayerHeight = 0;
+                    currentLayerWeight = 0;
+                }
+
+                element.LayerNumber = currentLayer;
+                currentLayerHeight += element.Height;
+                currentLayerWeight += element.Weight;
+            }
+        }
+
+        //______________________________________________________________________________________
+        // JSON Output
+        //______________________________________________________________________________________
+        
+        [HttpPost]
+        public IActionResult OptimizeAndGenerateJson()
+        {
+            // Retrieve the current elements from the session
+            var elementsJson = HttpContext.Session.GetString("Elements");
+            if (string.IsNullOrEmpty(elementsJson))
+            {
+                return Json(new { success = false, message = "No elements found to optimize." });
+            }
+        
+            var elements = JsonSerializer.Deserialize<List<Elements>>(elementsJson);
+        
+            if (elements == null || !elements.Any())
+            {
+                return Json(new { success = false, message = "No elements found to optimize." });
+            }
+        
+            // Clear previously packed pallets
+            packedPallets.Clear();
+        
+            // Run the optimization logic
+            OptimizePacking(elements);
+        
+            // Store the packed pallets result (optional: to session, if needed for later)
+            HttpContext.Session.SetString("PackedPallets", JsonSerializer.Serialize(packedPallets));
+        
+            // Generate the JSON output
+            var output = packedPallets.GroupBy(p => p.Group.Name)
+                .Select(group => new
+                {
+                    Tag = group.Key,
+                    Pallets = group.Select(p => new
                     {
-                        SmallestLength = PalletSizes[j].group.Length;
-                        index = j;
-                    }
-                }
-                //if the if statement didn't get run in the for loop, then dont add the element, and just print out an error.
-                if (index != -1)
-                    PalletSizes[index].ElementsFitOnPallet.Add(element);
-                else
-                    System.Diagnostics.Debug.WriteLine("No pallet fit the element");
-            }
-            //from here, the inputs are sorted into lists of the pallets they fit on.
-
-            PlaceEOnPallets(PalletSizes);
+                        PalletType = p.PalletType.ToString(),
+                        PalletGroup = p.Group.Name,
+                        Layers = p.elementsOnPallet.GroupBy(e => e.LayerNumber)
+                            .Select(layer => new
+                            {
+                                LayerNumber = layer.Key,
+                                Slots = layer.Select(e => new
+                                {
+                                    Slot = e.Slot,
+                                    Name = e.Name,
+                                    Rotation = e.IsRotated ? "Rotated" : "Original"
+                                })
+                            })
+                    })
+                });
+        
+            return Json(output);
         }
-
-        public void PlaceEOnPallets(List<PalletSizeList> PalletSizes)
-        {
-            List<PackedPallet> PackedPallets = new();
-            PackedPallet CurrentPallet = new();
-            int currentWidth = 0;
-            foreach (PalletSizeList elementList in PalletSizes)
-            {
-                CurrentPallet.Group = elementList.group;
-                int maxWidth = elementList.group.Width;
-                //Inside this foreach, we loop over each list of pallet sizes, and the lists of elements that can fit on those pallets.
-                foreach (Elements element in elementList.ElementsFitOnPallet)
-                {
-                    //inside this foreach, we loop over the list inside the palletgroup. 
-                    //just checks if the incoming element can fit on current pallet, if it can it get's added. if it can't, it will finish that pallet.
-                    //this isn't perfect, but should be good enough.
-                    if (currentWidth + element.Width < maxWidth)
-                    {
-                        var currentElement = element;
-                        currentElement = RotateElementsOnPallets(currentElement, CurrentPallet);
-                        CurrentPallet.elementsOnPallet.Add(currentElement);
-                        currentWidth += element.Width;
-                    }
-                    //no more room on pallet. 
-                    else
-                    {
-                        PackedPallets.Add(CurrentPallet);
-                        CurrentPallet = new();
-                        currentWidth = 0;
-                        //try again
-                        if (currentWidth + element.Width < maxWidth)
-                        {
-                            var currentElement = element;
-                            currentElement = RotateElementsOnPallets(currentElement, CurrentPallet);
-                            CurrentPallet.elementsOnPallet.Add(currentElement);
-                            currentWidth += element.Width;
-                        }
-
-                    }
-                }
-                //this is to start fresh with the new batch. We could make it better by sorting the list first, so we start with the smallest items.
-                //That way we can keep a "rest" element and check on each pallet. But since this is un-sorted, we'll just have a pallet with few items
-                //on it if there's any remaning.
-                if (CurrentPallet.elementsOnPallet.Count > 0)
-                {
-                    PackedPallets.Add(CurrentPallet);
-                    CurrentPallet = new();
-                    currentWidth = 0;
-                }
-            }
-
-        }
-
-        public Elements RotateElementsOnPallets(Elements element, PackedPallet currentPallet)
-        {
-            if (element.RotationRules == RotationOptions.NeedToRotate && element.Height < currentPallet.Group.Length + Pallets.MaxOverhang)
-            {
-                //switching values approach
-                int temp = element.Height;
-                element.Height = element.Length;
-                element.Length = temp;
-
-                /*
-                 * bool approach
-                 * element.upright = false;
-                 * 
-                 * string approach
-                 * element.orientation = "Sideways";
-                 */
-                
-
-            }
-            if (element.RotationRules == RotationOptions.CanRotate &&
-                element.Height < currentPallet.Group.Length + Pallets.MaxOverhang &&
-                (float)element.Height / (float)element.Length > 1) //HWF
-            {
-                
-                //rotate element
-            }
-            return element;
-        }
-
-
-        public void Output()
-        {
-            //This is a very rough draft of how the output method would look. Writing some of it now to visualise how we will handle the special pallets.
-            //normal pallets first,then special pallets later
-            List<PackedPallet> specialPallets = new();
-            foreach (PackedPallet packedPallet in packedPallets)
-            {
-                if (packedPallet.specialPallet)
-                {
-                    specialPallets.Add(packedPallet);
-                    continue;
-                }
-
-                //TODO: write out the pallets
-                /*
-                 * 
-                 * write the output
-                 * end first foreach loop
-                 * 
-                 * then
-                 * 
-                 * foreach(PackedPallet special in specialPallets){
-                 * write output 
-                 * }
-                 * 
-                 */
-
-            }
-
-
-
-
-
-        }
-
-
+        
     }
 }
-

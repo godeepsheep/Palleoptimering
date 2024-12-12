@@ -21,7 +21,12 @@ namespace PalletOptimization.Models
         public int Width { get; set; }
         public int Height { get; set; }
         public int Weight { get; set; }
-        
+        [NotMapped]
+        public bool IsRotated { get; set; }
+        [NotMapped]
+        public int LayerNumber { get; set; } = 0;
+        [NotMapped]
+        public int Slot { get; set; } = 0;
         public double HeightWidthFactor { get; set; } = 1.0;
     }
 }

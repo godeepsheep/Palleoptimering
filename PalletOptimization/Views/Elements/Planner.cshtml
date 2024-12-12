@@ -78,7 +78,6 @@ ViewData["Title"] = "Planner";
                         <span>@item.HeightWidthFactor</span>
                     </td>
 
-
                     <!-- Hidden input for InstanceId -->
                     <input type="hidden" name="elements[@item.InstanceId].InstanceId" value="@item.InstanceId" />
 
@@ -107,14 +106,10 @@ ViewData["Title"] = "Planner";
         }
     </div>
 
-    <!-- Include JavaScript -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="/js/planner.js"></script>
-
     <!-- Right Side: Pallet Customization Form -->
     <div style="width: 40%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
         <h3 id="CustomizePallet">Pallet Customization</h3>
-        <form asp-action="SavePalletSettings" method="post">
+        <form asp-action="SavePalletSettings" method="post" id="pallet-settings-form">
             <div class="mb-3">
                 <label for="MaxHeight" class="form-label">Max Height for Pallet + Element (mm)</label>
                 <input name="MaxHeight" type="number" class="form-control" id="MaxHeight" value="@(Pallets.MaxHeight)">
@@ -156,12 +151,12 @@ ViewData["Title"] = "Planner";
             </div>
 
             <button type="submit" class="btn btn-primary">Save Pallet Settings</button>
+            <button type="button" id="optimize-btn" class="btn btn-success">Optimize</button>
         </form>
     </div>
-
 </div>
 
-<!-- Toast notification styles (the pop up)--> 
+<!-- Toast notification styles (the pop-up) -->
 <style>
     .toast {
         visibility: hidden;
@@ -187,100 +182,108 @@ ViewData["Title"] = "Planner";
         opacity: 1; /* Fade in */
         transition: opacity 1s ease-in-out, visibility 0s;
     }
-
-
 </style>
 
 <!-- Toast element -->
 <div id="toast" class="toast"></div>
 
-
 @section Scripts {
-
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
+    $(document).ready(function () {
+        // Save All Elements
+        $("#save-elements-btn").click(function (event) {
+            event.preventDefault(); // Prevent default form submission
 
-    $(document).ready(function() {
-        // Add an event listener to the form submission
-        $("form").submit(function(event) {
-            // Loop through each row in the table
-            $("tbody tr").each(function() {
-                var instanceId = $(this).find("input[name^='elements']").attr("name").match(/elements\[(.*)\]/)[1];  // Regex to extract InstanceId
+            const formData = $("form").serialize();
 
-                // Find the hidden input with InstanceId and ensure it is populated
-                $(this).find("input[name$='.InstanceId']").val(instanceId);  // If needed, add to a hidden field
+            $.ajax({
+                url: "@Url.Action("SaveAllElements", "Elements")",
+                type: "POST",
+                data: formData,
+                success: function (response) {
+                    console.log("Elements saved successfully:", response);
+                    showToast("Elements saved successfully!");
+                },
+                error: function () {
+                    showToast("An error occurred while saving elements.");
+                },
             });
         });
-    });
 
-</script>
+        // Save Pallet Settings
+        $("#pallet-settings-form").submit(function (event) {
+            event.preventDefault(); // Prevent default form submission
 
+            const formData = $(this).serialize(); // Serialize form data
 
-<script>
-    $(document).ready(function() {
-        // Attach a click event to the save button
-        $("#save-elements-btn").click(function(event) {
-            // You can use jQuery to check the hidden input values before submitting
-            $("input[type='hidden'][name*='InstanceId']").each(function() {
-                console.log("InstanceId: " + $(this).val());
+            $.ajax({
+                url: "@Url.Action("SavePalletSettings", "Elements")",
+                type: "POST",
+                data: formData,
+                success: function (response) {
+                    console.log("Pallet settings saved:", response);
+                    showToast("Pallet settings saved successfully!");
+                },
+                error: function () {
+                    showToast("An error occurred while saving pallet settings.");
+                },
             });
-
-
         });
-    });
-</script>
 
+        // Optimize and Generate JSON
+        $("#optimize-btn").click(function () {
+            fetch('@Url.Action("OptimizeAndGenerateJson", "Elements")', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            })
+                .then((response) => {
+                    if (!response.ok) throw new Error("Failed to generate JSON file.");
+                    return response.json();
+                })
+                .then((data) => {
+                    const jsonString = JSON.stringify(data, null, 2);
+                    const blob = new Blob([jsonString], { type: "application/json" });
+                    const url = window.URL.createObjectURL(blob);
 
-<script>
+                    // Download JSON file
+                    const a = document.createElement("a");
+                    a.href = url;
+                    a.download = "OptimizedPallets.json";
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
 
-    //Show toast notification
-    function showToast(message) {
-        console.log("Toast is being triggered"); // Debug log
-        var toast = $("#toast");
+                    // Clean up
+                    window.URL.revokeObjectURL(url);
 
+                    showToast("Optimization complete. JSON file downloaded.");
+                })
+                .catch((error) => {
+                    console.error("Error:", error);
+                    showToast("An error occurred during optimization.");
+                });
+        });
 
-        toast.removeClass("show");
-        setTimeout(function() {
-            toast.text(message);
-            toast.addClass("show");
-        }, 10);
+        // Show toast notifications
+        function showToast(message) {
+            console.log("Toast is being triggered"); // Debug log
+            const toast = $("#toast");
 
-        // Hide toast after 4 seconds
-        setTimeout(function() {
             toast.removeClass("show");
-        }, 4000);
-    }
+            setTimeout(function () {
+                toast.text(message);
+                toast.addClass("show");
+            }, 10);
 
-
-    // Handle the form submission using AJAX
-    $("form").submit(function(event) {
-        event.preventDefault();  // Prevent form from submitting the traditional way
-
-        var formData = $(this).serialize();  // Serialize form data
-
-        var submitButton = $("button[type='submit']");
-        submitButton.prop("disabled", true); // Disable submit button
-
-        $.ajax({
-            url: "@Url.Action("SaveAllElements", "Elements")",  // Adjust with your controller/action
-            type: "POST",
-            data: formData,
-            success: function(response) {
-
-                console.log("AJAX success response:", response);
-
-                showToast("Elements saved successfully");
-
-                submitButton.prop("disabled", false);
-
-            },
-
-        });
+            // Hide toast after 4 seconds
+            setTimeout(function () {
+                toast.removeClass("show");
+            }, 4000);
+        }
     });
-
-
 </script>
-
-
 }
