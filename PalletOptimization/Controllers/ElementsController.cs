@@ -1,16 +1,14 @@
-﻿using Azure;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Client;
 using PalletOptimization.Data;
 using PalletOptimization.Enums;
-
 using PalletOptimization.Models;
 using System.Text.Json;
-using System.Xml.Linq;
-
 using System.Diagnostics;
-using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 
 namespace PalletOptimization.Controllers
 {
@@ -18,7 +16,6 @@ namespace PalletOptimization.Controllers
     {
         private readonly AppDbContext _context;
         public List<PackedPallet> packedPallets = new();
-        private List<TaggedItem> taggedItemsList = new();
 
         public ElementsController(AppDbContext context)
         {
@@ -39,7 +36,7 @@ namespace PalletOptimization.Controllers
             Debug.WriteLine("Elements in Planner:");
             foreach (var element in elements)
             {
-                Debug.WriteLine($"InstanceId: {element.InstanceId}, RotationRules: {element.RotationRules}");
+                Debug.WriteLine($"InstanceId: {element.InstanceId}, RotationRules: {element.RotationRules}, Tag: {element.Tag}");
             }
 
             ViewBag.RotationOptions = Enum.GetValues(typeof(RotationOptions)).Cast<RotationOptions>().ToList();
@@ -58,7 +55,6 @@ namespace PalletOptimization.Controllers
                 var element = await _context.Elements.FirstOrDefaultAsync(m => m.Id == id);
                 if (element != null)
                 {
-                    // Create a new instance with InstanceId for each element
                     var instanceElement = new Elements
                     {
                         Id = element.Id,
@@ -78,7 +74,6 @@ namespace PalletOptimization.Controllers
                 }
             }
 
-            // Serialize and store the list in the session
             HttpContext.Session.SetString("Elements", JsonSerializer.Serialize(elements));
 
             return RedirectToAction("Planner");
@@ -89,30 +84,26 @@ namespace PalletOptimization.Controllers
         {
             try
             {
-                // Retrieve current elements from session
                 var elementsJson = HttpContext.Session.GetString("Elements");
                 var currentElements = string.IsNullOrEmpty(elementsJson)
                     ? new List<Elements>()
                     : JsonSerializer.Deserialize<List<Elements>>(elementsJson);
-                
+
                 if (currentElements == null)
                 {
                     Debug.WriteLine("No elements found in session.");
                     return Json(new { success = false, message = "No elements found in session." });
                 }
-                Debug.WriteLine($"Current Elements in Session (Before Update): {JsonSerializer.Serialize(currentElements)}");
 
-                // Update elements in session
                 foreach (var updatedElement in elements.Values)
                 {
-                    var existingElement = currentElements.FirstOrDefault(e => e.InstanceId == updatedElement.InstanceId);
+                    var existingElement =
+                        currentElements.FirstOrDefault(e => e.InstanceId == updatedElement.InstanceId);
                     if (existingElement != null)
                     {
-                        Debug.WriteLine($"Updating Element: {existingElement.InstanceId}");
                         existingElement.RotationRules = updatedElement.RotationRules;
                         existingElement.IsSpecial = updatedElement.IsSpecial;
                         existingElement.Tag = updatedElement.Tag;
-                        Debug.WriteLine($"Updated Element: {JsonSerializer.Serialize(existingElement)}");
                     }
                     else
                     {
@@ -124,14 +115,10 @@ namespace PalletOptimization.Controllers
                             Tag = updatedElement.Tag
                         };
                         currentElements.Add(newElement);
-                        Debug.WriteLine($"Added New Element: {JsonSerializer.Serialize(newElement)}");
                     }
                 }
 
-                // Save updated elements back to session
                 HttpContext.Session.SetString("Elements", JsonSerializer.Serialize(currentElements));
-
-                Debug.WriteLine($"Updated Elements in Session (After Update): {JsonSerializer.Serialize(currentElements)}");
 
                 return Json(new { success = true, message = "Elements updated successfully!" });
             }
@@ -142,51 +129,35 @@ namespace PalletOptimization.Controllers
             }
         }
 
+        //______________________________________________________________________________________
+        // Algorithm
+        //______________________________________________________________________________________
 
-        [HttpPost]
-        public IActionResult SavePalletSettings()
+        private List<PalletGroup> GetPalletGroupsFromDb()
         {
             try
             {
-                Pallets.MaxHeight = int.Parse(Request.Form["MaxHeight"]);
-                Pallets.MaxWeight = int.Parse(Request.Form["MaxWeight"]);
-                Pallets.MaxOverhang = int.Parse(Request.Form["Overhang"]);
-                Pallets.SpaceBetweenElements = int.Parse(Request.Form["SpaceBetween"]);
-                Pallets.StackingMaxHeight = int.Parse(Request.Form["StackingHeight"]);
-                Pallets.StackingMaxWeight = int.Parse(Request.Form["StackingWeight"]);
-                Pallets.Endplate = int.Parse(Request.Form["AddedPlate"]);
-                Pallets.SlotsOnPallet = int.Parse(Request.Form["MaxPalletSpace"]);
+                var palletGroups = _context.PalletGroups.ToList();
 
-                // Retrieve existing session data
-                var sessionData = HttpContext.Session.GetString("Elements");
-                if (!string.IsNullOrEmpty(sessionData))
+                if (!palletGroups.Any())
                 {
-                    Debug.WriteLine("Existing session data for elements found.");
-                }
-                else
-                {
-                    Debug.WriteLine("No existing session data for elements.");
+                    throw new Exception("No pallet groups found in the database.");
                 }
 
-                Debug.WriteLine("Pallet settings saved successfully.");
-                return Json(new { success = true, message = "Pallet settings saved successfully!" });
+                Debug.WriteLine($"Fetched {palletGroups.Count} pallet groups from the database.");
+                return palletGroups;
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Error in SavePalletSettings: {ex.Message}");
-                return Json(new { success = false, message = "Error saving pallet settings." });
+                Debug.WriteLine($"Error fetching pallet groups: {ex.Message}");
+                throw;
             }
         }
 
-
-
-        //______________________________________________________________________________________
-        //The Algorithm
-        //______________________________________________________________________________________
-
         public void OptimizePacking(List<Elements> elements)
         {
-            // Group elements by tag
+            var palletGroups = GetPalletGroupsFromDb();
+
             var taggedGroups = elements
                 .Where(e => !string.IsNullOrEmpty(e.Tag))
                 .GroupBy(e => e.Tag)
@@ -194,56 +165,88 @@ namespace PalletOptimization.Controllers
 
             var untaggedItems = elements.Where(e => string.IsNullOrEmpty(e.Tag)).ToList();
 
-            // Process each tagged group
             foreach (var (tag, groupElements) in taggedGroups)
             {
-                packedPallets.AddRange(PackElements(groupElements, tag));
+                packedPallets.AddRange(PackElements(groupElements, tag, palletGroups));
             }
 
-            // Process untagged items
-            packedPallets.AddRange(PackElements(untaggedItems, null));
+            packedPallets.AddRange(PackElements(untaggedItems, null, palletGroups));
         }
 
-        private List<PackedPallet> PackElements(List<Elements> elements, string? tag)
+        private List<PackedPallet> PackElements(List<Elements> elements, string? tag, List<PalletGroup> palletGroups)
         {
             var pallets = new List<PackedPallet>();
-            PackedPallet currentPallet = InitializeNewPallet(tag);
+            PackedPallet currentPallet = InitializeNewPallet(tag, palletGroups);
 
             foreach (var element in elements.OrderByDescending(e => e.Height))
             {
+                if (!ValidateAndApplyRotation(element, currentPallet.Group.Width, currentPallet.Group.Length))
+                {
+                    Debug.WriteLine($"Element {element.Name} cannot fit even with rotation.");
+                    continue;
+                }
+
                 if (!CanFitOnPallet(currentPallet, element))
                 {
-                    // Finalize current pallet
-                    ApplyLayering(currentPallet);
                     pallets.Add(currentPallet);
-
-                    // Start a new pallet
-                    currentPallet = InitializeNewPallet(tag);
+                    currentPallet = InitializeNewPallet(tag, palletGroups);
                 }
 
                 PlaceElementOnPallet(currentPallet, element);
             }
 
-            // Finalize the last pallet
             if (currentPallet.elementsOnPallet.Any())
             {
-                ApplyLayering(currentPallet);
                 pallets.Add(currentPallet);
             }
 
             return pallets;
         }
 
-        private PackedPallet InitializeNewPallet(string? tag)
+        private PackedPallet InitializeNewPallet(string? tag, List<PalletGroup> palletGroups)
         {
+            var bestMatch = palletGroups
+                .Where(pg => pg.Length >= Pallets.Length && pg.Width >= Pallets.Width)
+                .OrderBy(pg => pg.MaxWeight)
+                .FirstOrDefault();
+
+            if (bestMatch == null)
+            {
+                throw new Exception("No suitable pallet configuration found.");
+            }
+
             return new PackedPallet
             {
                 elementsOnPallet = new List<Elements>(),
                 TotalWeight = 0,
                 TotalHeight = 0,
-                Group = new PalletGroup { Name = tag ?? "Default" },
-                specialPallet = !string.IsNullOrEmpty(tag)
+                Group = bestMatch,
+                specialPallet = !string.IsNullOrEmpty(tag),
+                PalletType = (PalletTypeEnum)bestMatch.Id
             };
+        }
+
+        private bool ValidateAndApplyRotation(Elements element, int palletWidth, int palletLength)
+        {
+            Debug.WriteLine($"Validating rotation for element {element.Name} with dimensions (LxW): {element.Length} x {element.Width}");
+
+            if (element.Length <= palletWidth && element.Width <= palletLength)
+            {
+                element.IsRotated = false;
+                Debug.WriteLine($"Element {element.Name} fits without rotation.");
+                return true;
+            }
+
+            if (element.Width <= palletWidth && element.Length <= palletLength)
+            {
+                (element.Length, element.Width) = (element.Width, element.Length);
+                element.IsRotated = true;
+                Debug.WriteLine($"Element {element.Name} fits with rotation.");
+                return true;
+            }
+
+            Debug.WriteLine($"Element {element.Name} cannot fit even with rotation.");
+            return false;
         }
 
         private bool CanFitOnPallet(PackedPallet pallet, Elements element)
@@ -257,85 +260,70 @@ namespace PalletOptimization.Controllers
             pallet.elementsOnPallet.Add(element);
             pallet.TotalWeight += element.Weight;
             pallet.TotalHeight += element.Height;
-        }
 
-        private void ApplyLayering(PackedPallet pallet)
-        {
-            int currentLayerHeight = 0;
-            int currentLayerWeight = 0;
-            int currentLayer = 1;
-
-            foreach (var element in pallet.elementsOnPallet.OrderByDescending(e => e.Height))
-            {
-                if (currentLayerHeight + element.Height > Pallets.StackingMaxHeight ||
-                    currentLayerWeight + element.Weight > Pallets.StackingMaxWeight)
-                {
-                    currentLayer++;
-                    currentLayerHeight = 0;
-                    currentLayerWeight = 0;
-                }
-
-                element.LayerNumber = currentLayer;
-                currentLayerHeight += element.Height;
-                currentLayerWeight += element.Weight;
-            }
+            Debug.WriteLine($"Placed element {element.Name} on pallet. Total weight: {pallet.TotalWeight}, Total height: {pallet.TotalHeight}");
         }
 
         //______________________________________________________________________________________
         // JSON Output
         //______________________________________________________________________________________
-        
+
         [HttpPost]
         public IActionResult OptimizeAndGenerateJson()
         {
-            // Retrieve the current elements from the session
-            var elementsJson = HttpContext.Session.GetString("Elements");
-            if (string.IsNullOrEmpty(elementsJson))
+            try
             {
-                return Json(new { success = false, message = "No elements found to optimize." });
-            }
-        
-            var elements = JsonSerializer.Deserialize<List<Elements>>(elementsJson);
-        
-            if (elements == null || !elements.Any())
-            {
-                return Json(new { success = false, message = "No elements found to optimize." });
-            }
-        
-            // Clear previously packed pallets
-            packedPallets.Clear();
-        
-            // Run the optimization logic
-            OptimizePacking(elements);
-        
-            // Store the packed pallets result (optional: to session, if needed for later)
-            HttpContext.Session.SetString("PackedPallets", JsonSerializer.Serialize(packedPallets));
-        
-            // Generate the JSON output
-            var output = packedPallets.GroupBy(p => p.Group.Name)
-                .Select(group => new
+                var elementsJson = HttpContext.Session.GetString("Elements");
+                if (string.IsNullOrEmpty(elementsJson))
                 {
-                    Tag = group.Key,
-                    Pallets = group.Select(p => new
+                    return Json(new { success = false, message = "No elements found to optimize." });
+                }
+
+                var elements = JsonSerializer.Deserialize<List<Elements>>(elementsJson);
+                if (elements == null || !elements.Any())
+                {
+                    return Json(new { success = false, message = "No elements found to optimize." });
+                }
+
+                packedPallets.Clear();
+                OptimizePacking(elements);
+
+                var output = packedPallets.GroupBy(p => p.Group.Name)
+                    .Select(group => new
                     {
-                        PalletType = p.PalletType.ToString(),
-                        PalletGroup = p.Group.Name,
-                        Layers = p.elementsOnPallet.GroupBy(e => e.LayerNumber)
-                            .Select(layer => new
-                            {
-                                LayerNumber = layer.Key,
-                                Slots = layer.Select(e => new
+                        Tag = group.Key ?? "Untagged",
+                        Pallets = group.Select(p => new
+                        {
+                            PalletType = p.PalletType.ToString(),
+                            PalletGroup = p.Group.Name,
+                            TotalWeight = p.TotalWeight,
+                            TotalHeight = p.TotalHeight,
+                            Layers = p.elementsOnPallet.GroupBy(e => e.LayerNumber)
+                                .Select(layer => new
                                 {
-                                    Slot = e.Slot,
-                                    Name = e.Name,
-                                    Rotation = e.IsRotated ? "Rotated" : "Original"
-                                })
-                            })
-                    })
-                });
-        
-            return Json(output);
+                                    LayerNumber = layer.Key,
+                                    Slots = layer.Select(e => new
+                                    {
+                                        Slot = e.Slot,
+                                        Name = e.Name,
+                                        Rotation = e.IsRotated ? "Rotated" : "Original",
+                                        Weight = e.Weight,
+                                        Height = e.Height
+                                    }).ToList()
+                                }).ToList()
+                        }).ToList()
+                    }).ToList();
+
+                Debug.WriteLine("Generated JSON Output:");
+                Debug.WriteLine(JsonSerializer.Serialize(output, new JsonSerializerOptions { WriteIndented = true }));
+
+                return Json(output);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Unexpected error: {ex.Message}");
+                return Json(new { success = false, message = "Unexpected error occurred." });
+            }
         }
-        
     }
 }
