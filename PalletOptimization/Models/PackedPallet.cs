@@ -12,5 +12,7 @@ namespace PalletOptimization.Models
         public PalletGroup Group { get; set; }
         public PalletTypeEnum PalletType { get; set; }
 
+        public Slots Slots { get; set; } = new();
+
     }
 }

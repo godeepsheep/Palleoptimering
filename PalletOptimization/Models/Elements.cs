@@ -28,5 +28,10 @@ namespace PalletOptimization.Models
         [NotMapped]
         public int Slot { get; set; } = 0;
         public double HeightWidthFactor { get; set; } = 1.0;
+        
+        public (int RotatedLength, int RotatedWidth) GetRotatedDimensions() 
+            => RotationRules == RotationOptions.CanRotate 
+                ? (Width, Length) 
+                : (Length, Width);
     }
 }

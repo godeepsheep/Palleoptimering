@@ -27,7 +27,6 @@
         public static int StackingMaxHeight { get; set; } = 2000; //mm 2 meter default
         public static int StackingMaxWeight { get; set; } = 50; //kg
         public static int Endplate { get; set; } = 1;
-        public static bool Active { get; set; } = false; 
-        
+        public static bool Active { get; set; } = false;
     }
 }

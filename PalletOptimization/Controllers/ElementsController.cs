@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,6 +16,7 @@ namespace PalletOptimization.Controllers
     {
         private readonly AppDbContext _context;
         public List<PackedPallet> packedPallets = new();
+        public List<Elements> unfitElements = new();
 
         public ElementsController(AppDbContext context)
         {
@@ -156,43 +157,88 @@ namespace PalletOptimization.Controllers
 
         public void OptimizePacking(List<Elements> elements)
         {
+            var groupedElements = GroupElementsByTag(elements);
+            
             var palletGroups = GetPalletGroupsFromDb();
 
+            foreach (var (tag, group) in groupedElements)
+            {
+                var sortedElements = SortElements(group);
+                packedPallets.AddRange(PackElements(sortedElements, tag, palletGroups));
+            }
+            
+
+        }
+        
+        private Dictionary<string, List<Elements>> GroupElementsByTag(List<Elements> elements)
+        {
             var taggedGroups = elements
                 .Where(e => !string.IsNullOrEmpty(e.Tag))
                 .GroupBy(e => e.Tag)
                 .ToDictionary(g => g.Key, g => g.ToList());
 
-            var untaggedItems = elements.Where(e => string.IsNullOrEmpty(e.Tag)).ToList();
+            var untaggedGroup = elements
+                .Where(e => string.IsNullOrEmpty(e.Tag))
+                .ToList();
 
-            foreach (var (tag, groupElements) in taggedGroups)
+            if (untaggedGroup.Any())
             {
-                packedPallets.AddRange(PackElements(groupElements, tag, palletGroups));
+                taggedGroups["Untagged"] = untaggedGroup;
             }
 
-            packedPallets.AddRange(PackElements(untaggedItems, null, palletGroups));
+            return taggedGroups;
         }
+
+        private List<Elements> SortElements(List<Elements> elements)
+        {
+            // Default sorting: by weight (descending)
+            return elements.OrderByDescending(e => e.Weight).ThenByDescending(e => e.Height).ToList();
+        }
+        
 
         private List<PackedPallet> PackElements(List<Elements> elements, string? tag, List<PalletGroup> palletGroups)
         {
             var pallets = new List<PackedPallet>();
             PackedPallet currentPallet = InitializeNewPallet(tag, palletGroups);
-
-            foreach (var element in elements.OrderByDescending(e => e.Height))
+            var sortedElements = elements
+                .OrderByDescending(e => e.Weight)
+                .ThenByDescending(e => e.Height)
+                .ToList();
+            foreach (var element in sortedElements)
             {
+                
                 if (!ValidateAndApplyRotation(element, currentPallet.Group.Width, currentPallet.Group.Length))
                 {
+                    unfitElements.Add(element);
                     Debug.WriteLine($"Element {element.Name} cannot fit even with rotation.");
                     continue;
                 }
 
-                if (!CanFitOnPallet(currentPallet, element))
+                var targetPallet = pallets.FirstOrDefault(p => CanFitOnPallet(p, element));
+                if (targetPallet != null)
                 {
-                    pallets.Add(currentPallet);
-                    currentPallet = InitializeNewPallet(tag, palletGroups);
+                    AssignElementToOptimalSlotAndLayer(element, targetPallet);
                 }
-
-                PlaceElementOnPallet(currentPallet, element);
+                else
+                {
+                    if (currentPallet.elementsOnPallet.Any())
+                    {
+                        pallets.Add(currentPallet);
+                    }
+                    currentPallet = InitializeNewPallet(tag, palletGroups);
+                    
+                    if (CanFitOnPallet(currentPallet, element))
+                    {
+                        AssignElementToOptimalSlotAndLayer(element, currentPallet);
+                    }
+                    else
+                    {
+                        Debug.WriteLine($"Skipping element {element.Name} - Cannot fit on any pallet.");
+                        packedPallets.Add(currentPallet);
+                        currentPallet = InitializeNewPallet(tag, palletGroups);
+                        AssignElementToOptimalSlotAndLayer(element, currentPallet);
+                    }
+                }
             }
 
             if (currentPallet.elementsOnPallet.Any())
@@ -239,10 +285,13 @@ namespace PalletOptimization.Controllers
 
             if (element.Width <= palletWidth && element.Length <= palletLength)
             {
-                (element.Length, element.Width) = (element.Width, element.Length);
-                element.IsRotated = true;
-                Debug.WriteLine($"Element {element.Name} fits with rotation.");
-                return true;
+                if (element.RotationRules == RotationOptions.CanRotate || element.RotationRules == RotationOptions.NeedToRotate)
+                {
+                    (element.Length, element.Width) = (element.Width, element.Length);
+                    element.IsRotated = true;
+                    Debug.WriteLine($"Element {element.Name} fits with rotation.");
+                    return true;
+                }
             }
 
             Debug.WriteLine($"Element {element.Name} cannot fit even with rotation.");
@@ -253,6 +302,63 @@ namespace PalletOptimization.Controllers
         {
             return pallet.TotalWeight + element.Weight <= Pallets.MaxWeight &&
                    pallet.TotalHeight + element.Height <= Pallets.MaxHeight;
+        }
+
+        private void AssignElementToOptimalSlotAndLayer(Elements element, PackedPallet pallet)
+        {
+            int slotWidth = pallet.Group.Width / Pallets.SlotsOnPallet;
+            bool needsMultiSlot = element.Width > slotWidth;
+
+            int selectedSlot = DetermineOptimalSlot(pallet, element, needsMultiSlot);
+            element.Slot = selectedSlot;
+
+            if (needsMultiSlot)
+            {
+                element.Slot = selectedSlot == 1 ? 1 :
+                    selectedSlot == 5 ? 5 : 3;
+            }
+
+            element.LayerNumber = DetermineLayerNumber(pallet, element);
+
+            PlaceElementOnPallet(pallet, element);
+        }
+        private int DetermineOptimalSlot(PackedPallet pallet, Elements element, bool needsMultiSlot)
+        {
+            
+            if (pallet.elementsOnPallet.Count < 2 && element.Weight > 50)
+            {
+                return pallet.elementsOnPallet.Count == 0 ? 1 : 5;
+            }
+
+            // Find an available slot
+            for (int slot = 1; slot <= Pallets.SlotsOnPallet; slot++)
+            {
+                bool isSlotAvailable = !pallet.elementsOnPallet
+                    .Any(e => e.Slot == slot || (needsMultiSlot && e.Slot == (slot % Pallets.SlotsOnPallet) + 1));
+
+                if (isSlotAvailable)
+                {
+                    return slot;
+                }
+            }
+
+            return 3; // Fallback to middle slot
+        }
+        private int DetermineLayerNumber(PackedPallet pallet, Elements element)
+        {
+            // If adding this element would exceed max weight or height, start a new layer
+            if (pallet.TotalWeight + element.Weight > Pallets.StackingMaxWeight || 
+                pallet.TotalHeight + element.Height > Pallets.StackingMaxHeight)
+            {
+                pallet.TotalWeight = 0;
+                pallet.TotalHeight = 0;
+        
+                return pallet.elementsOnPallet.Max(e => e.LayerNumber) + 1;
+            }
+
+            return pallet.elementsOnPallet.Any() 
+                ? pallet.elementsOnPallet.Max(e => e.LayerNumber) 
+                : 1;
         }
 
         private void PlaceElementOnPallet(PackedPallet pallet, Elements element)
@@ -286,6 +392,7 @@ namespace PalletOptimization.Controllers
                 }
 
                 packedPallets.Clear();
+                unfitElements.Clear();
                 OptimizePacking(elements);
 
                 var output = packedPallets.GroupBy(p => p.Group.Name)
@@ -296,28 +403,44 @@ namespace PalletOptimization.Controllers
                         {
                             PalletType = p.PalletType.ToString(),
                             PalletGroup = p.Group.Name,
-                            TotalWeight = p.TotalWeight,
-                            TotalHeight = p.TotalHeight,
+                            p.TotalWeight,
+                            p.TotalHeight,
                             Layers = p.elementsOnPallet.GroupBy(e => e.LayerNumber)
                                 .Select(layer => new
                                 {
                                     LayerNumber = layer.Key,
                                     Slots = layer.Select(e => new
-                                    {
-                                        Slot = e.Slot,
-                                        Name = e.Name,
+                                    { 
+                                        e.Slot,
+                                        e.Name,
                                         Rotation = e.IsRotated ? "Rotated" : "Original",
-                                        Weight = e.Weight,
-                                        Height = e.Height
+                                        e.Weight,
+                                        e.Height
                                     }).ToList()
                                 }).ToList()
                         }).ToList()
                     }).ToList();
+                
+                var unfitElementsOutput = unfitElements.Select(e => new
+                {
+                    e.Name,
+                    e.Length,
+                    e.Width,
+                    e.Height,
+                    e.Weight,
+                    RotationRules = e.RotationRules.ToString(),
+                    e.Tag
+                }).ToList();
+                var finalOutput = new
+                {
+                    PackedPallets = output,
+                    UnfitElements = unfitElementsOutput
+                };
 
                 Debug.WriteLine("Generated JSON Output:");
-                Debug.WriteLine(JsonSerializer.Serialize(output, new JsonSerializerOptions { WriteIndented = true }));
+                Debug.WriteLine(JsonSerializer.Serialize(finalOutput, new JsonSerializerOptions { WriteIndented = true }));
 
-                return Json(output);
+                return Json(finalOutput);
             }
             catch (Exception ex)
             {
